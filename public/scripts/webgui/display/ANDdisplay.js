@@ -5,6 +5,7 @@ dojo.require("webgui.pac.GridPresentation");
 dojo.require("webgui.pac.DndTargetable");
 
 dojo.require("dojo.data.ItemFileWriteStore");
+dojo.require("webgui.pac.Utils");
 
 dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {	
 	  constructor: function(args) {
@@ -17,24 +18,31 @@ dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
 		};
 		function parameterHandler (parameter) {
 			/* console.log("[ANDParameterStore] received " + JSON.stringify(parameter)); */
+//			var str = "Parameter:";
+//			for (key in parameter) {
+//				str += " " + key + "->" + parameter[key];
+//			}
+//			console.info(str);
+//			[15:36:02.055] "Parameter: value->0 clazz->java.lang.Double objectid->dad653b8-f27e-488f-81b2-01ea9b7acebb datasetidentifier->0 name->Payload Deployment State description->The State of the Payload Deployment. '1' means deployed. '0' means not-deployed. timestamp->1306240560830"			
 			
 			// TODO refactor this filtering using the controller
-			if(!viewParameters[parameter.Name] || viewParameters[parameter.Name] === false)
+			if(!viewParameters[parameter.name] || viewParameters[parameter.name] === false)
 				return;
 				
-			parameter.key = parameter.Name;
+			parameter.key = parameter.name;
 			//AND display store logic
-			store.fetch({query: {key:parameter.Name},
+			store.fetch({query: {key:parameter.name},
 				onBegin: function(size, request){
 					if(size == 0){
 						store.newItem(parameter);
 					}
 				},    
-				onItem: function(item){				
-					store.setValue(item,"Name",parameter.Name);
-					store.setValue(item,"Value",parameter.Value);
-					store.setValue(item,"Type",parameter.Type);
-					store.setValue(item,"Timestamp",parameter.Timestamp);
+				onItem: function(item) {
+					store.setValue(item,"Name",parameter.name);
+					store.setValue(item,"Value",parameter.value);
+					store.setValue(item,"Type",parameter.clazz);
+					var date = webgui.pac.Utils.formatDate(parameter.timestamp);
+					store.setValue(item,"Timestamp", date);
 				},
 				onError: function(er) {
 					console.err(er);
@@ -86,7 +94,7 @@ dojo.declare("ANDController", webgui.pac.Controller,{
 				{"field": 'Value', "name": 'Value', width: '200px'},
 				{"field": 'Unit', "name": 'Unit', width: '100px'},
 				{"field": 'Type', "name": 'Type', width: '100px'},
-				{"field": 'Timestamp', "name": 'Timestamp', width: '100px'},
+				{"field": 'Timestamp', "name": 'Timestamp', width: '200px'},
 			]
 		}});
 		// add DnD capability to the presentation 

@@ -6,6 +6,8 @@ dojo.require("webgui.pac.DndTargetable");
 
 dojo.require("dojo.data.ItemFileWriteStore");
 
+dojo.require("webgui.pac.Utils");
+
 dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
 	constructor: function() {
 		var key = 'Timestamp';
@@ -21,31 +23,37 @@ dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
 		
 		function parameterHandler(parameter) {
 			//console.log("[ANDParameterStore] received " + JSON.stringify(parameter));
-			if(!viewParameters[parameter.Name] || viewParameters[parameter.Name] === false)
-				return;
-
-			//init new timestamp store element, as we don't really require all parameter stuff
-			var storeElem = {};
-			storeElem[parameter.Name + "Value"] = parameter.Value;
-			storeElem.Name = parameter.Name;
-			storeElem.Timestamp = parameter.Timestamp;
-			store.newItem(storeElem);
-			
-			/*refactor, prolly need to use queries and different sort of table !!!*/
-			counter++;
-			if(counter > limit) {
-				//getting the size of the store
-				var size = function(size, request){
-					//remove excess elements 
-					store.fetch({count: (size - limit),
-						onItem: function(item){
-							store.deleteItem(item);
-						}
-					});
-				};
-				store.fetch({query: {}, onBegin: size, start: 0, count: 0});
+			if (!viewParameters[parameter.name] || viewParameters[parameter.name] === false) {
+			    return;
 			}
-			
+			try {
+//			    console.log("SCD received " + parameter.name);
+    			//init new timestamp store element, as we don't really require all parameter stuff
+    			var storeElem = {};
+    			storeElem[parameter.name + "Value"] = parameter.value;
+    			storeElem.Name = parameter.name;
+    			storeElem.Timestamp = parameter.timestamp;
+    			storeElem.DisplayTime = webgui.pac.Utils.formatDate(parameter.timestamp);
+    			store.newItem(storeElem);
+    			
+    			/*refactor, prolly need to use queries and different sort of table !!!*/
+    			counter++;
+    			if(counter > limit) {
+    				//getting the size of the store
+    				var size = function(size, request){
+    					//remove excess elements 
+    					store.fetch({count: (size - limit),
+    						onItem: function(item){
+    							store.deleteItem(item);
+    						}
+    					});
+    				};
+    				store.fetch({query: {}, onBegin: size, start: 0, count: 0});
+    			}
+			}
+			catch (e) {
+			    console.error("SCD error: " + e);
+			}
 			/*refactor/*/
 		}
         
@@ -82,7 +90,7 @@ dojo.declare("SCDController", webgui.pac.Controller, {
 			"store": dataAbstraction.getStore(),
 			"clientSort": true,
 			"structure": [
-				{"field": "Timestamp", "name": "Timestamp", width: '100px'}
+				{"field": "DisplayTime", "name": "Timestamp", width: '200px'}
 			]
 			//"updateDelay": 1000
 		}});

@@ -25,15 +25,15 @@ dojo.declare("X3DDataAbstraction", webgui.pac.Abstraction, {
 		 */
 		var parameterHandler = function(parameter) {
 
-			switch(parameter.Name) {
+			switch(parameter.name) {
 				case "Elevation":
-					satellite.Elevation = parameter.Value;
+					satellite.Elevation = parameter.value;
 					break;
 				case "Longitude":
-					satellite.Longitude = parameter.Value;
+					satellite.Longitude = parameter.value;
 					break;
 				case "Latitude":
-					satellite.Latitude = parameter.Value;
+					satellite.Latitude = parameter.value;
 					break;
 			}
 

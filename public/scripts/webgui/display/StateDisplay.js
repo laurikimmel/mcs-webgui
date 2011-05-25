@@ -5,6 +5,7 @@ dojo.require("webgui.pac.Abstraction");
 dojo.require("webgui.pac.GridPresentation");
 //Stores
 dojo.require("dojo.data.ItemFileWriteStore");
+dojo.require("webgui.pac.Utils");
 
 dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
 	constructor: function(args) {
@@ -18,27 +19,28 @@ dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
 		function parameterHandler (parameter) {
 			//console.log("[StateParameterStore] received " + JSON.stringify(parameter));
 		// TODO refactor this filtering using the controller
-			if(!viewParameters[parameter.Name] || viewParameters[parameter.Name] === false){
-			return};
-			if(parameter.Unit !== "") {
+			if (!viewParameters[parameter.name] || viewParameters[parameter.name] === false) {
 				return;
 			}
-			console.log("Here");
-			parameter.key = parameter.Name;
-			parameter.State = '<div class="stateTable' +(parameter.Value == true ? "True" : "False") + '">' + parameter.Value + '</div>';
+//			if(parameter.unit !== "") {
+//				return;
+//			}
+//			console.log("Here");
+			parameter.key = parameter.name;
+			parameter.state = '<div class="stateTable' +(parameter.value == true ? "True" : "False") + '">' + parameter.value + '</div>';
 
 			//AND display store logic
-			store.fetch({query: {key: parameter.Name},
+			store.fetch({query: {key: parameter.name},
 				onBegin: function(size, request){
 					if(size == 0){
 						store.newItem(parameter);
 					}
 				},
 				onItem: function(item){
-					store.setValue(item,"Name",parameter["Name"]);
-					store.setValue(item,"State",parameter["State"]);
-					store.setValue(item,"Timestamp",parameter["Timestamp"]);
-					store.setValue(item,"Description",parameter["Descripton"]);
+					store.setValue(item, "Name", parameter.name);
+					store.setValue(item, "State", parameter.state);
+					store.setValue(item, "Timestamp", webgui.pac.Utils.formatDate(parameter.timestamp));
+					store.setValue(item, "Description", parameter.description);
 				},
 				onError: function(er) {
 					console.err(er);
@@ -87,9 +89,9 @@ dojo.declare("StatesController", webgui.pac.Controller, {
             "escapeHTMLInData": false,
 			"structure": [
                 {"field": 'Name', "name": 'Name', "width": '200px'},
-				{"field": 'State', "name": 'State', "width": '100px'},
-				{"field": 'Timestamp', "name": 'Timestamp', "width": '100px'},
-                {"field": 'Description', "name": 'Description', "width": '200px'},
+				{"field": 'State', "name": 'State', "width": '200px'},
+				{"field": 'Timestamp', "name": 'Timestamp', "width": '200px'},
+                {"field": 'Description', "name": 'Description', "width": 'auto'},
 			]
 		}});
 		presentation = webgui.pac.DndTargetable(presentation,{

@@ -25,14 +25,15 @@ dojo.declare("GRAPHAbstraction", webgui.pac.Abstraction, {
 		
 		function parameterHandler(parameter) {
 			//console.log("[ANDParameterStore] received " + JSON.stringify(parameter));
-			if(!viewParameters[parameter.Name] || viewParameters[parameter.Name] === false)
-				return;
+			if (!viewParameters[parameter.name] || viewParameters[parameter.name] === false) {
+			    return;
+			}
 
 			//init new timestamp store element, as we don't really require all parameter stuff
 			var storeElem = {};
-			storeElem[parameter.Name + "Value"] = parameter.Value;
-			storeElem.Name = parameter.Name;
-			storeElem.Timestamp = parameter.Timestamp;
+			storeElem[parameter.name + "Value"] = parameter.value;
+			storeElem.Name = parameter.name;
+			storeElem.Timestamp = parameter.timestamp;
 			
 			store.newItem(storeElem);
 			
@@ -108,6 +109,7 @@ dojo.declare("GRAPHPresentation",webgui.pac.Presentation, {
 		});
 		chart.addAxis("x");
 		chart.addAxis("y", {vertical:true});
+//		chart.resize(800, 400);
 		
 		// connect browser resize to chart
 		dojo.connect(dijit.byId("chartPane"), "resize", this, function(evt) {
