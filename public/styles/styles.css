@@ -1,8 +1,10 @@
-html, body { width: 100%;
-	    height: 100%;
-	    padding: 0;
-	    border: 0;
-	    margin: 0;			
+html, body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    overflow: hidden;
 }
 
 .viewbuttons {
@@ -24,28 +26,28 @@ html, body { width: 100%;
 }
 
 #borderContainer { width: 100%;
-		height: 100%;
+        height: 100%;
                 overflow: visible;}
 
 /* pre-loader specific stuff to prevent unsightly flash of unstyled content */
 #loader {
-	    padding:0;
-	    margin:0;
-	    position:relative;
-	    top:0; left:0;
-	    width:100%; height:100%;
-	    z-index:999;
-	    vertical-align:middle;
-	    background:#ededed;
+        padding:0;
+        margin:0;
+        position:relative;
+        top:0; left:0;
+        width:100%; height:100%;
+        z-index:999;
+        vertical-align:middle;
+        background:#ededed;
 }
 #loaderInner {
-	    padding:5px;
-	    position:relative;
-	    left:0;
-	    top:0;
-	    width:175px;
-	    background:#3c3;
-	    color:#fff;
+        padding:5px;
+        position:relative;
+        left:0;
+        top:0;
+        width:175px;
+        background:#3c3;
+        color:#fff;
 }
 
 #x3dElement {
@@ -53,51 +55,51 @@ html, body { width: 100%;
 }
 
 .dojoDndItem { 
-	padding:3px; 
+    padding:3px; 
 }
 
 .dojoDndItemOver {
-	background-color: #ededed;
-	cursor:pointer;
+    background-color: #ededed;
+    cursor:pointer;
 }
 
 .dojoDndItemSelected {
-	background-color: #5bbdea; color: #444;
+    background-color: #5bbdea; color: #444;
 }
 
 .dojoDndItemAnchor {
-	background-color: #5bbdea; color: black;
+    background-color: #5bbdea; color: black;
 }
 
 .dojoDndItemOver .dojoDndItemSelected {
-	background-color: #ededed;
+    background-color: #ededed;
 }
 
 .dojoDndItemOver .dojoDndItemAnchor {
-	background-color: #ededed;
+    background-color: #ededed;
 }
 
 .dojoDndItemBefore {
-	border-top: 2px solid #369;
+    border-top: 2px solid #369;
 }
 
 .dojoDndItemAfter {
-	border-bottom: 2px solid #369;
+    border-bottom: 2px solid #369;
 }
 
 .dojoDndAvatar {
-	border:2px solid #ccc;
+    border:2px solid #ccc;
 }
-	
+    
 .dojoDndAvatarHeader {
-	background-color: #aaa;
+    background-color: #aaa;
 }
 
 .dojoDndAvatarItem {
-	background-color: #fff;
-	border-bottom:1px solid #666;
+    background-color: #fff;
+    border-bottom:1px solid #666;
 }
 
 .dojoDndAvatarItem .itemText {
-	font-size: 120%;
+    font-size: 120%;
 }

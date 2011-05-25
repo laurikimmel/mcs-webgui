@@ -3,7 +3,6 @@ dojo.require("dijit.layout.BorderContainer");
 dojo.require("dijit.layout.TabContainer");
 dojo.require("dijit.layout.AccordionContainer");
 dojo.require("dijit.layout.ContentPane");
-dojo.require("dijit.form.CheckBox");
 
 var msgbus = dojo.require("webgui.msgbus");
 dojo.require("webgui.assembly.Assembler");

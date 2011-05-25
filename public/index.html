@@ -3,18 +3,22 @@
     <head>
         <meta charset=utf-8 />
         <title>WebGUI</title>
-        <link rel="stylesheet" type="text/css" href="scripts/dojo1.5/dijit/themes/claro/claro.css">
-        <link rel="stylesheet" type="text/css" href="scripts/dojo1.5/dojox/grid/resources/Grid.css">
-        <link rel="stylesheet" type="text/css" href="scripts/dojo1.5/dojox/grid/resources/claroGrid.css">
-		<link rel="stylesheet" type="text/css" href="scripts/dojo1.5/dojo/resources/dnd.css">
-        <link rel="stylesheet" type="text/css" href="styles/styles.css">
-        <link rel="stylesheet" type="text/css" href="styles/x3dom.css"/>
+        
+        <style type="text/css">
+            @import url("scripts/dojo-1.6.1/dijit/themes/claro/claro.css");
+            @import url("scripts/dojo-1.6.1/dojox/grid/resources/Grid.css");
+            @import url("scripts/dojo-1.6.1/dojox/grid/resources/claroGrid.css");
+            @import url("scripts/dojo-1.6.1/dojo/resources/dnd.css");
+            @import url("styles/styles.css");
+            @import url("styles/x3dom.css");
+        </style>
+        
         <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.5/dojo/dojo.xd.js" djConfig="parseOnLoad: false"></script> -->
-		<script type="text/javascript" src="http://www.x3dom.org/x3dom/release/x3dom.js"></script>
-        <script type="text/javascript" src="scripts/dojo1.5/dojo/dojo.js" djConfig="parseOnLoad: false"></script>
-		<script type="text/javascript">
-			dojo.registerModulePath("webgui","../../webgui");
-		</script>		
+        <script type="text/javascript" src="http://www.x3dom.org/x3dom/release/x3dom.js"></script>
+        <script type="text/javascript" src="scripts/dojo-1.6.1/dojo/dojo.js" djConfig="parseOnLoad: false"></script>
+        <script type="text/javascript">
+            dojo.registerModulePath("webgui","../../webgui");
+        </script>        
         <script type="text/javascript" src="scripts/webgui/script.js"></script>
 
     </head>
@@ -22,20 +26,20 @@
         <div id="loader">
             <div id="loaderInner" style="direction:ltr;">Loading application ... </div>
         </div>
-        <div dojoType="dijit.layout.BorderContainer" id="borderContainer" design="sidebar" liveSplitters="false" gutters="false">
-			<div dojoType="dijit.layout.ContentPane" region="right" splitter="false" id="ParameterContainer" style="width:200px">
-				<p>Parameter filter</p>
-				<ul id="parameters" class="container"></ul>
-			</div>
-			<div dojoType="dijit.layout.TabContainer" region="center">
-				<div dojoType="dijit.layout.BorderContainer" design="headline" liveSplitter="true" title="Multi Display">
-					<div dojoType="dijit.layout.ContentPane" title="AND Display" id ="ANDTableContainer" region="left" splitter="true"></div>
-					<div dojoType="dijit.layout.ContentPane" title="SCD Display" id="SCDTableContainer" region="center" splitter="true"></div>
-					<div dojoType="dijit.layout.ContentPane" title="Graph display" id="ChartContainer" region="bottom">
-						<div id="chartDiv" ></div>
-						<!--div id="legend"></div-->
-					</div>
-				</div>
+        <div dojoType="dijit.layout.BorderContainer" id="borderContainer" design="sidebar" liveSplitters="false" gutters="true">
+            <div dojoType="dijit.layout.ContentPane" region="leading" splitter="false" id="ParameterContainer" style="width:200px" title="Parameters">
+                <p>Parameter filter</p>
+                <ul id="parameters" class="container"></ul>
+            </div>
+            <div dojoType="dijit.layout.TabContainer" region="center" tabPosition="bottom">
+                <div dojoType="dijit.layout.BorderContainer" design="headline" liveSplitter="true" title="Multi Display">
+                    <div dojoType="dijit.layout.ContentPane" title="AND Display" id ="ANDTableContainer" region="left" splitter="true" style="width:50%"></div>
+                    <div dojoType="dijit.layout.ContentPane" title="SCD Display" id="SCDTableContainer" region="center" splitter="true"></div>
+                    <div dojoType="dijit.layout.ContentPane" title="Graph display" id="ChartContainer" region="bottom" splitter="true" style="height:300px">
+                        <div id="chartDiv"></div>
+                        <!--div id="legend"></div-->
+                    </div>
+                </div>
                 <div dojoType="dijit.layout.ContentPane" title="3D Display" id="3DContainer">
 
                     <div class="viewbuttons">

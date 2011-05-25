@@ -108,7 +108,6 @@ dojo.declare("GRAPHPresentation",webgui.pac.Presentation, {
 		});
 		chart.addAxis("x");
 		chart.addAxis("y", {vertical:true});
-		chart.resize(800, 400);
 		
 		// connect browser resize to chart
 		dojo.connect(dijit.byId("chartPane"), "resize", this, function(evt) {
