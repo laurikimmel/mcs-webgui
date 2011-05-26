@@ -9,7 +9,7 @@ dojo.require("webgui.msgbus");
  */
 dojo.declare("webgui.comm.CometProxy",null,{
     cometdUrl: "http://127.0.0.1:8086/cometd", //default url for cometd
-    initCometd: function(){
+    initCometd: function() {
         var io = dojox.cometd;
         console.log("[ConnectionManager] connecting to " + this.cometdUrl);
         io.init(this.cometdUrl);
@@ -36,11 +36,11 @@ dojo.declare("webgui.comm.CometProxy",null,{
         */
         var subscribeToCometdTopic = function(subscription) {
             var handle = io.subscribe(subscription.topic, publishToInnerBus);
-            handle.addCallback(function(){
+            handle.addCallback(function() {
                 console.log("[ConnectionManager] subscription to "+ handle.args[0] + " established");
             });
         };        
-        webgui.msgbus.subscribe("/request/subscribe",subscribeToCometdTopic);
+        webgui.msgbus.subscribe("/request/subscribe", subscribeToCometdTopic);
     },
     constructor: function(args){
         dojo.safeMixin(this.args);

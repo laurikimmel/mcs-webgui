@@ -9,45 +9,44 @@ dojo.require("webgui.pac.Presentation");
  * No store currently required
  */
 dojo.declare("X3DDataAbstraction", webgui.pac.Abstraction, {
-	constructor: function() {
-		var satellite = {};
+    constructor: function() {
+        var satellite = {};
 
-		/**
-		 * privileged function to return the satellite object for views
-		 */
-		this.getsatellite = function() {
-			return satellite;
-		}
+        /**
+         * privileged function to return the satellite object for views
+         */
+        this.getsatellite = function() {
+            return satellite;
+        }
 
-		/**
-		 * Updates satellite position data any time some of its
-		 * parameters arrive.
-		 */
-		var parameterHandler = function(parameter) {
+        /**
+         * Updates satellite position data any time some of its
+         * parameters arrive.
+         */
+        var parameterHandler = function(parameter) {
 
-			switch(parameter.name) {
-				case "Elevation":
-					satellite.Elevation = parameter.value;
-					break;
-				case "Longitude":
-					satellite.Longitude = parameter.value;
-					break;
-				case "Latitude":
-					satellite.Latitude = parameter.value;
-					break;
-			}
+            switch(parameter.name) {
+                case "Elevation":
+                    satellite.Elevation = parameter.value;
+                    break;
+                case "Longitude":
+                    satellite.Longitude = parameter.value;
+                    break;
+                case "Latitude":
+                    satellite.Latitude = parameter.value;
+                    break;
+            }
 
-		};
+        };
 
         //listens to topics to all channels broadcast to currently
-		var subscribeToTopic = function(subscription) {
-			msgbus.subscribe(subscription.topic, parameterHandler);
-		};
+        var subscribeToTopic = function(subscription) {
+            msgbus.subscribe(subscription.topic, parameterHandler);
+        };
 
-		msgbus.subscribe("/request/subscribe",subscribeToTopic);
+        msgbus.subscribe("/request/subscribe", subscribeToTopic);
 
-
-	}
+    }
 });
 
 dojo.declare("X3DPresentation", webgui.pac.Presentation, {
@@ -66,9 +65,9 @@ dojo.declare("X3DPresentation", webgui.pac.Presentation, {
  * 3D-display controller
  */
 dojo.declare("X3DController", webgui.pac.Controller, {
-        updateInterval: 100, //update interval in milliseconds
-    	divId: "chartDiv", //defaultId
-	constructor: function() {
+    updateInterval: 100, //update interval in milliseconds
+    divId: "chartDiv", //defaultId
+    constructor: function() {
             var converter = new CartesianConverter();
             var dataAbstraction = new X3DDataAbstraction();
             var presentation = new X3DPresentation();
@@ -77,14 +76,14 @@ dojo.declare("X3DController", webgui.pac.Controller, {
                 presentation.refreshView(converter.convertItem(dataAbstraction.getsatellite()));
             };
 
-             setInterval(updateView, this.updateInterval);
-	}
+            setInterval(updateView, this.updateInterval);
+    }
 });
 
-dojo.declare("webgui.display.DDDdisplay",null,{
-	constructor: function(){
-		var controller = new X3DController();
-	}
+dojo.declare("webgui.display.DDDdisplay", null, {
+    constructor: function(){
+        var controller = new X3DController();
+    }
 });
 
 /**
