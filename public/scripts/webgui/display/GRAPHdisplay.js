@@ -23,7 +23,7 @@ dojo.declare("GRAPHAbstraction", webgui.pac.Abstraction, {
         var counter = 0;
         var limit = 40;
 
-        function parameterHandler(parameter) {
+        this.handleParameter = function (parameter) {
             //console.log("[ANDParameterStore] received " + JSON.stringify(parameter));
             if (!viewParameters[parameter.name] || viewParameters[parameter.name] === false) {
                 return;
@@ -54,24 +54,9 @@ dojo.declare("GRAPHAbstraction", webgui.pac.Abstraction, {
             }
 
             /*refactor/*/
-        }
-
-
-        //subscribe to internal topics dynamically, when they are added to the subscription lists
-                /*
-        var subscribeToTopic = function(subscription) {
-            //console.log(this.updateViewCallback);
-            msgbus.subscribe("/parameter/live", this, "parameterHandler");
-            dojo.connect(this, "parameterHandler", this, "updateViewCallback");
-        };
-*/
-        var subscribeToTopic = function(subscription) {
-            msgbus.subscribe(subscription.topic, parameterHandler);
         };
 
-        msgbus.subscribe("/request/subscribe", subscribeToTopic);
-
-         //parameter hiding and showing
+        //parameter hiding and showing
         function addViewParameter(item) {
             viewParameters[item.parameter] = true;
         }
@@ -89,7 +74,7 @@ dojo.declare("GRAPHPresentation", webgui.pac.Presentation, {
     updateInterval: 500, //update interval in milliseconds
     domId:null,
     constructor: function() {
-    console.log("creating new chart in " + this.domId);
+        console.log("creating new chart in " + this.domId);
         var chart = new dojox.charting.Chart2D(this.domId);
         this.getChart = function() {
             return chart;
@@ -149,7 +134,8 @@ dojo.declare("GRAPHPresentation", webgui.pac.Presentation, {
 dojo.declare("GRAPHController", webgui.pac.Controller, {
 
     divId: "chartDiv", //defaultId
-    constructor: function() {        
+    constructor: function() {
+        this.channels = ["/parameter/live"];
         var dataAbstraction = new GRAPHAbstraction();
         var presentation = new GRAPHPresentation({
             "domId":this.divId
@@ -165,6 +151,10 @@ dojo.declare("GRAPHController", webgui.pac.Controller, {
                 return {node: n, data: item};
             }
         });
+        
+        this.channelHandler = function(parameter, channel) {
+            dataAbstraction.handleParameter(parameter);
+        };
 
         /*get the right plot of the series, also truncates the series for scrolling*/
         var historyLimit = 100; //the limit of datapoints TODO should be a mixinvariable, but then this function can't access this
@@ -220,5 +210,6 @@ dojo.declare("GRAPHController", webgui.pac.Controller, {
 dojo.declare("webgui.display.GRAPHdisplay", null, {
     constructor: function(){
         var controller = new GRAPHController();
+        controller.subscribe();
     }
 });

@@ -21,7 +21,7 @@ dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
         var counter = 0;
         var limit = 40;
 
-        function parameterHandler(parameter) {
+        this.handleParameter = function (parameter) {
             //console.log("[ANDParameterStore] received " + JSON.stringify(parameter));
             if (!viewParameters[parameter.name] || viewParameters[parameter.name] === false) {
                 return;
@@ -55,15 +55,9 @@ dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
                 console.error("SCD error: " + e);
             }
             /*refactor/*/
-        }
-
-        var subscribeToTopic = function(subscription) {
-            msgbus.subscribe(subscription.topic, parameterHandler);
         };
 
-        msgbus.subscribe("/request/subscribe", subscribeToTopic);
-
-         //parameter hiding and showing
+        //parameter hiding and showing
         function addViewParameter(item) {
             viewParameters[item.parameter] = true;
         }
@@ -82,6 +76,7 @@ dojo.declare("SCDController", webgui.pac.Controller, {
     //divId: "TelemetryTools",
     columnLimit: 5, //maximum number of parameters shown, based on order recieved
     constructor: function() {
+        this.channels = ["/parameter/live"];
         var dataAbstraction = new SCDAbstraction();        
         var presentation = new webgui.pac.GridPresentation({
         "domId": this.divId+"Container",
@@ -106,6 +101,10 @@ dojo.declare("SCDController", webgui.pac.Controller, {
                 return {node: n, data: item};
             }
         });
+        
+        this.channelHandler = function(parameter, channel) {
+            dataAbstraction.handleParameter(parameter);
+        };
 
         /**
         * function for updating tabel columns if new parameters are added.
@@ -150,5 +149,6 @@ dojo.declare("webgui.display.SCDdisplay",null,{
     constructor: function(){
         console.log("[SCDdisplay] initializing components..");
         var controller = new SCDController();
+        controller.subscribe();
     }
 });

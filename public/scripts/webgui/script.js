@@ -18,10 +18,12 @@ dojo.addOnLoad(function() {
 function ParameterGenerator() {
     var names = ["par1","par2","par3", "par4", "parT"];
     var generateValue = function(limit) {
-        return Math.floor(Math.random()*limit);
+        return Math.floor(Math.random() * limit);
     };
-     setInterval(function() {
-        var param = {}
+    
+    setInterval(function() {
+        var param = {};
+        var log = {};
         param.name = names[generateValue(names.length)];
         param.value = generateValue(105);
         param.type = "Parameter";
@@ -29,7 +31,10 @@ function ParameterGenerator() {
         param.clazz = "N/A";
         param.description = "Description of " + param.name;
         param.state = param.value % 3 == 0;
-        console.log("sending " + JSON.stringify(param));
+//        console.log("sending " + JSON.stringify(param));
+        log.timeStamp = param.timestamp;
+        log.message = "Sending " + JSON.stringify(param);
         webgui.msgbus.publish("/parameter/live", [param]);
+        webgui.msgbus.publish("/logs/live", [log]);
     }, 2000);
 }

@@ -16,7 +16,8 @@ dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
             return store;
         };
         var viewParameters = [];
-        function parameterHandler (parameter) {
+        
+        this.handleParameter = function(parameter) {
             //console.log("[StateParameterStore] received " + JSON.stringify(parameter));
         // TODO refactor this filtering using the controller
             if (!viewParameters[parameter.name] || viewParameters[parameter.name] === false) {
@@ -46,14 +47,9 @@ dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
                     console.err(er);
                 }
             });
-        }
-
-        var subscribeToTopic = function(subscription) {
-            msgbus.subscribe(subscription.topic, parameterHandler);
         };
-
-        msgbus.subscribe("/request/subscribe", subscribeToTopic);
-                //parameter hiding and showing
+       
+        //parameter hiding and showing
         function addViewParameter(item) {
             console.log("AND display addViewParameter for ");
             viewParameters[item.parameter] = true;
@@ -78,22 +74,25 @@ dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
 dojo.declare("StatesController", webgui.pac.Controller, {
     divId: "StatesTable", //defaultId
     constructor: function() {
+        this.channels = ["/parameter/live"];
         var dataAbstraction = new StatesAbstraction();
+        
         var presentation = new webgui.pac.GridPresentation({
-        "domId": this.divId+"Container",
-        "configuration": {
-            "id": this.divId,
-            "store": dataAbstraction.getStore(),
-            "clientSort": true,
-            //"updateDelay": 1000,
-            "escapeHTMLInData": false,
-            "structure": [
-                {"field": 'Name', "name": 'Name', "width": '200px'},
-                {"field": 'State', "name": 'State', "width": '200px'},
-                {"field": 'Timestamp', "name": 'Timestamp', "width": '200px'},
-                {"field": 'Description', "name": 'Description', "width": 'auto'},
-            ]
+            "domId": this.divId+"Container",
+            "configuration": {
+                "id": this.divId,
+                "store": dataAbstraction.getStore(),
+                "clientSort": true,
+                //"updateDelay": 1000,
+                "escapeHTMLInData": false,
+                "structure": [
+                    {"field": 'Name', "name": 'Name', "width": '200px'},
+                    {"field": 'State', "name": 'State', "width": '200px'},
+                    {"field": 'Timestamp', "name": 'Timestamp', "width": '200px'},
+                    {"field": 'Description', "name": 'Description', "width": 'auto'},
+                ]
         }});
+        
         presentation = webgui.pac.DndTargetable(presentation,{
             "isSource":false,
             "creator":function creator(item,hint){
@@ -105,6 +104,10 @@ dojo.declare("StatesController", webgui.pac.Controller, {
                 return {node: n, data: item};
             }
         });
+        
+        this.channelHandler = function(message, channel) {
+            dataAbstraction.handleParameter(message);
+        };
     }
 });
 
@@ -112,5 +115,6 @@ dojo.declare("webgui.display.StateDisplay",null,{
     constructor: function(){
         console.log("[StateDisplay] initializing components..");
         var controller = new StatesController();
+        controller.subscribe();
     }
 });

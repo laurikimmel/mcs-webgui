@@ -9,7 +9,7 @@ dojo.require("webgui.pac.Utils");
 
 dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
       constructor: function(args) {
-          var key = 'key';
+            var key = 'key';
             var storedata = {identifier: key, items: []};
             var store = new dojo.data.ItemFileWriteStore({data:storedata});
             var viewParameters = [];
@@ -17,7 +17,7 @@ dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
                 return store;
             };
             
-            function parameterHandler (parameter) {
+            this.handleParameter = function(parameter) {
                 /* console.log("[ANDParameterStore] received " + JSON.stringify(parameter)); */
 //              var str = "Parameter:";
 //              for (key in parameter) {
@@ -52,12 +52,6 @@ dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
                 });
             }
         
-            var subscribeToTopic = function(subscription) {
-                msgbus.subscribe(subscription.topic, parameterHandler);
-            };
-
-            msgbus.subscribe("/request/subscribe", subscribeToTopic);
-
             //parameter hiding and showing
             function addViewParameter(item) {
                 console.log("AND display addViewParameter for ");
@@ -84,9 +78,12 @@ dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
 dojo.declare("ANDController", webgui.pac.Controller,{
     divId: "ANDTable", //defaultId
     constructor: function() {
+        
+        this.channels = ["/parameter/live"];
+        
         var dataAbstraction = new ANDAbstraction();
         var presentation = new webgui.pac.GridPresentation({
-            "domId": this.divId+"Container",
+            "domId": this.divId + "Container",
             "configuration": {
             "id": this.divId,
             "store": dataAbstraction.getStore(),
@@ -115,12 +112,17 @@ dojo.declare("ANDController", webgui.pac.Controller,{
                  return {node: n, data: item};
              }
          });
+         
+         this.channelHandler = function(parameter, channel) {
+             dataAbstraction.handleParameter(parameter);
+         }
     }
 });
 
 dojo.declare("webgui.display.ANDdisplay", null, {
     constructor: function(){
         console.log("[ANDdisplay] initializing components..");
-        var controller = new ANDController();        
+        var controller = new ANDController();
+        controller.subscribe();
     }
 });
