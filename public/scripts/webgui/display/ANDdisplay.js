@@ -21,11 +21,10 @@ dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
                 /* console.log("[ANDParameterStore] received " + JSON.stringify(parameter)); */
 //              var str = "Parameter:";
 //              for (key in parameter) {
-//                  str += " " + key + "->" + parameter[key];
+//                  str += " " + key + "->" + parameter[key] + "; ";
 //              }
 //              console.info(str);
 //             [15:36:02.055] "Parameter: value->0 clazz->java.lang.Double objectid->dad653b8-f27e-488f-81b2-01ea9b7acebb datasetidentifier->0 name->Payload Deployment State description->The State of the Payload Deployment. '1' means deployed. '0' means not-deployed. timestamp->1306240560830"            
-
                 // TODO refactor this filtering using the controller
                 if (!viewParameters[parameter.name] || viewParameters[parameter.name] === false) {
                     return;
@@ -40,11 +39,11 @@ dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
                         }
                     },    
                     onItem: function(item) {
-                        store.setValue(item,"Name",parameter.name);
-                        store.setValue(item,"Value",parameter.value);
-                        store.setValue(item,"Type",parameter.clazz);
+                        store.setValue(item, "name", parameter.name);
+                        store.setValue(item, "value", parameter.value);
+//                        store.setValue(item, "type", parameter.clazz);
                         var date = webgui.pac.Utils.formatDate(parameter.timestamp);
-                        store.setValue(item,"Timestamp", date);
+                        store.setValue(item, "timestamp", date);
                     },
                     onError: function(er) {
                         console.err(er);
@@ -90,11 +89,11 @@ dojo.declare("ANDController", webgui.pac.Controller,{
             "clientSort": true,
             //"updateDelay": 1000,
             "structure": [
-                    {"field": 'Name', "name": 'Name', width: '200px'},
-                    {"field": 'Value', "name": 'Value', width: '200px'},
-                    {"field": 'Unit', "name": 'Unit', width: '100px'},
-                    {"field": 'Type', "name": 'Type', width: '100px'},
-                    {"field": 'Timestamp', "name": 'Timestamp', width: '200px'},
+                    {"field": 'name', "name": 'Name', width: '200px'},
+                    {"field": 'value', "name": 'Value', width: '200px'},
+//                    {"field": 'unit', "name": 'Unit', width: '100px'},
+                    {"field": 'type', "name": 'Type', width: '100px'},
+                    {"field": 'timestamp', "name": 'Timestamp', width: '200px'},
                 ]
             }
         });

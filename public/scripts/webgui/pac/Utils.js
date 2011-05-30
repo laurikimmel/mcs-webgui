@@ -1,6 +1,17 @@
 dojo.provide("webgui.pac.Utils");
-dojo.require("dojox.date.posix");
+
+dojo.require("dojo.date.locale");
+
+var DEFAULT_FORMAT = "yyyy.D HH:mm:ss.SSS ZZZZ";
 
 webgui.pac.Utils.formatDate = function(timestamp) {
-    return dojox.date.posix.strftime(new Date(timestamp), "%Y.%j %T %z");
+    return format(new Date(timestamp), DEFAULT_FORMAT);
 }
+
+function format(date, fmt) {
+    // TODO: set time zone to UTC
+    return dojo.date.locale.format(date, {
+        selector: "date",
+        datePattern: fmt,
+    });
+};

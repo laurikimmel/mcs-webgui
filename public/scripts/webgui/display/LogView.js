@@ -30,7 +30,7 @@ dojo.declare("LogViewAbstraction", webgui.pac.Abstraction, {
                 var storeItem = {};
                 storeItem.id = dojox.uuid.generateRandomUuid();
                 storeItem.timestamp = webgui.pac.Utils.formatDate(logMessage.timeStamp);
-                storeItem.message = logMessage.message;
+                storeItem.message = logMessage.renderedMessage;
                 store.newItem(storeItem);
                 
                 counter++;

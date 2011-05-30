@@ -1,6 +1,7 @@
 ﻿dojo.provide("webgui.assembly.Assembler");
 
 dojo.require("webgui.comm.CometProxy");
+dojo.require("webgui.comm.WebSocketProxy");
 
 dojo.require("webgui.display.ANDdisplay");
 dojo.require("webgui.display.StateDisplay");
@@ -28,6 +29,7 @@ dojo.declare("webgui.assembly.Assembler",null,{
         //comet proxy TODO: add generic comm proxy class
 
         new webgui.comm.CometProxy({cometdUrl: "http://localhost:8086/cometd"});
+//        new webgui.comm.WebSocketProxy();
 //        new ParameterGenerator();
         //initialize Agents...
         new webgui.display.ANDdisplay();

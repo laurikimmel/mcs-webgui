@@ -1,9 +1,9 @@
 ﻿dojo.provide("webgui.comm.CometProxy");
 //Cometd for CometProxy
 dojo.require("dojox.cometd");
-dojo.require("dojox.cometd.longPollTransport");
 // our message bus
 dojo.require("webgui.msgbus");
+
 /**
  * Refactor, currently this class'es code is called by a subscription bus, bu it might not be the best idea ...
  */
@@ -34,8 +34,8 @@ dojo.declare("webgui.comm.CometProxy", null, {
         };
         
         /**
-        *  CometListener listenes internal dojo channel "request/subscribe" for topics.
-        *  If a topic is requested, this function is called, which in turn subscribes to the requested topic on cometd message-bus.
+        *  CometListener listenes internal dojo channel "request/channel" for channels.
+        *  If a channel is requested, this function is called, which in turn subscribes to the requested channel on cometd message-bus.
         *  @param subscription The  subscription message
         */
         var subscribeToCometdChannel = function(subscription) {
