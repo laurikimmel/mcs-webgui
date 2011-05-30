@@ -24,9 +24,11 @@ dojo.declare("ParameterAbstraction", webgui.pac.Abstraction, {
         };
         return ret;
     },
+    
     get: function() {
         return this.parameterNames;
     },
+    
     constructor: function() {
         this.parameterNames = []; 
     }
@@ -40,17 +42,18 @@ dojo.declare("ParameterPresentation", webgui.pac.Presentation, {
  * Parameter selection screen controller
  */
 dojo.declare("ParameterController", webgui.pac.Controller, {
-    divId: "parameters", //defaultId
+    
+    divId: "parameters", // defaultId
+    
     constructor: function(args) {
-        
-        this.channels = ["/parameter/live"];
+        dojo.safeMixin(args);
         
         var presentation = new ParameterPresentation({
-            "domId":this.divId
+            "domId": this.divId
         });
         // add DnD cabaility to the presentation
         presentation = webgui.pac.DndSourceable(presentation,{
-            "copyOnly":true
+            "copyOnly": true
         });
         var dataAbstraction = new ParameterAbstraction();
 
@@ -70,8 +73,8 @@ dojo.declare("ParameterController", webgui.pac.Controller, {
     }
 });
 
-dojo.declare("webgui.display.ParameterDisplay", null,{
-    constructor: function(args){
+dojo.declare("webgui.display.ParameterDisplay", null, {
+    constructor: function(args) {
         var controller = new ParameterController(args);
         controller.subscribe();
     }

@@ -10,21 +10,20 @@ dojo.require("webgui.pac.Utils");
 
 dojo.declare("LogViewAbstraction", webgui.pac.Abstraction, {
     
-    constructor: function() { 
+    constructor: function(limit) {
         var key = "id";
         var storedata = { identifier: key, items: [] };
-        var store = new dojo.data.ItemFileWriteStore({ data:storedata });
+        var store = new dojo.data.ItemFileWriteStore({ data: storedata });
         
         this.getStore = function() {
             return store;
         };
         
-        //for removing from store TODO refactor
+        // for removing from store TODO refactor
         var counter = 0;
-        var limit = 50;
         
         this.handleMessage = function(logMessage) {
-//          [18:31:05.667] "channel: /logs/live; message: {\"data\":\"{\\\"categoryName\\\":\\\"org.hbird.business.simpleparametersimulator.ConstantParameter\\\",\\\"threadName\\\":\\\"state.of.video.stream\\\",\\\"locationInformation\\\":{\\\"fullInfo\\\":null,\\\"className\\\":\\\"?\\\",\\\"fileName\\\":\\\"?\\\",\\\"lineNumber\\\":\\\"?\\\",\\\"methodName\\\":\\\"?\\\"},\\\"ndc\\\":null,\\\"renderedMessage\\\":\\\"Sending new constant value with name 'Video Stream State'.\\\",\\\"throwableInformation\\\":null,\\\"throwableStrRep\\\":null,\\\"propertyKeySet\\\":[],\\\"fqnofLoggerClass\\\":null,\\\"properties\\\":{},\\\"message\\\":\\\"Sending new constant value with name 'Video Stream State'.\\\",\\\"logger\\\":null,\\\"level\\\":{\\\"syslogEquivalent\\\":7},\\\"timeStamp\\\":1306423865517,\\\"loggerName\\\":\\\"org.hbird.business.simpleparametersimulator.ConstantParameter\\\"}\",\"channel\":\"/logs/live\"}"
+            // [18:31:05.667] "channel: /logs/live; message: {\"data\":\"{\\\"categoryName\\\":\\\"org.hbird.business.simpleparametersimulator.ConstantParameter\\\",\\\"threadName\\\":\\\"state.of.video.stream\\\",\\\"locationInformation\\\":{\\\"fullInfo\\\":null,\\\"className\\\":\\\"?\\\",\\\"fileName\\\":\\\"?\\\",\\\"lineNumber\\\":\\\"?\\\",\\\"methodName\\\":\\\"?\\\"},\\\"ndc\\\":null,\\\"renderedMessage\\\":\\\"Sending new constant value with name 'Video Stream State'.\\\",\\\"throwableInformation\\\":null,\\\"throwableStrRep\\\":null,\\\"propertyKeySet\\\":[],\\\"fqnofLoggerClass\\\":null,\\\"properties\\\":{},\\\"message\\\":\\\"Sending new constant value with name 'Video Stream State'.\\\",\\\"logger\\\":null,\\\"level\\\":{\\\"syslogEquivalent\\\":7},\\\"timeStamp\\\":1306423865517,\\\"loggerName\\\":\\\"org.hbird.business.simpleparametersimulator.ConstantParameter\\\"}\",\"channel\":\"/logs/live\"}"
             
             try {
                 var storeItem = {};
@@ -38,9 +37,14 @@ dojo.declare("LogViewAbstraction", webgui.pac.Abstraction, {
                     // getting the size of the store
                     var size = function(size, request) {
                         // remove excess elements
-                        store.fetch({count: (size - limit), onItem: function(item){ store.deleteItem(item); } });
+                        store.fetch({ 
+                            count: (size - limit), 
+                            onItem: function(item) { 
+                                store.deleteItem(item); 
+                            } 
+                        });
                     };
-                    store.fetch({query: {}, onBegin: size, start: 0, count: 0});
+                    store.fetch({ query: {}, onBegin: size, start: 0, count: 0 });
                 }
             }
             catch (e) {
@@ -52,13 +56,14 @@ dojo.declare("LogViewAbstraction", webgui.pac.Abstraction, {
 
 dojo.declare("LogViewController", webgui.pac.Controller, {
     
-    divId : "LogView", //defaultId
+    divId: "LogView", // defaultId
+    limit: 10,
     
     constructor: function(args) {
+    
+        dojo.safeMixin(args);
         
-        this.channels = ["/logs/live"];
-        
-        var dataAbstraction = new LogViewAbstraction();
+        var dataAbstraction = new LogViewAbstraction(this.limit);
         
         var presentation = new webgui.pac.GridPresentation({
             "domId": this.divId + "Container",
@@ -70,7 +75,8 @@ dojo.declare("LogViewController", webgui.pac.Controller, {
                     { "field": "timestamp", "name": "Timestamp", width: "200px" },
                     { "field": "message", "name": "Message", width: "auto" },
                 ]
-            }});
+            }
+        });
         
         this.channelHandler = function(message, channel) {
             dataAbstraction.handleMessage(message);
