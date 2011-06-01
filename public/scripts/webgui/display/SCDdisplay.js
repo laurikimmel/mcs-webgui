@@ -12,7 +12,7 @@ dojo.require("webgui.pac.Utils");
 dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
     
     constructor: function() {
-        var key = 'Timestamp';
+        var key = 'Timestamp'; // TODO use some better identity key here
         var storedata = { identifier: key, items: [] };
         var store = new dojo.data.ItemFileWriteStore({ data: storedata });
         var viewParameters = [];
@@ -81,7 +81,7 @@ dojo.declare("SCDController", webgui.pac.Controller, {
     columnLimit: 5, // XXX - not used! - maximum number of parameters shown, based on order received
     
     constructor: function(args) {
-        dojo.safeMixin(args);
+        
         var dataAbstraction = new SCDAbstraction();        
         var presentation = new webgui.pac.GridPresentation({
             "domId": this.divId + "Container",

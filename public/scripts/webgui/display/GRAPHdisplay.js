@@ -139,7 +139,7 @@ dojo.declare("GRAPHController", webgui.pac.Controller, {
     divId: "chartDiv", // defaultId
     
     constructor: function(args) {
-        dojo.safeMixin(args);
+        
         var dataAbstraction = new GRAPHAbstraction();
         var presentation = new GRAPHPresentation({
             "domId": this.divId

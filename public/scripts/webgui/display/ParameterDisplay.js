@@ -46,8 +46,7 @@ dojo.declare("ParameterController", webgui.pac.Controller, {
     divId: "parameters", // defaultId
     
     constructor: function(args) {
-        dojo.safeMixin(args);
-        
+
         var presentation = new ParameterPresentation({
             "domId": this.divId
         });

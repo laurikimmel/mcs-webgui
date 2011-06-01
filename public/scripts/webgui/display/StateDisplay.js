@@ -82,7 +82,6 @@ dojo.declare("StatesController", webgui.pac.Controller, {
     divId: "StatesTable", // defaultId
     
     constructor: function(args) {
-        dojo.safeMixin(args);
         
         var dataAbstraction = new StatesAbstraction();
         

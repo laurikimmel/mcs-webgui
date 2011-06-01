@@ -27,10 +27,12 @@
             <div id="loaderInner" style="direction:ltr;">Loading application ... </div>
         </div>
         <div dojoType="dijit.layout.BorderContainer" id="borderContainer" design="sidebar" liveSplitters="false" gutters="true">
+
             <div dojoType="dijit.layout.ContentPane" region="leading" splitter="false" id="ParameterContainer" style="width:200px" title="Parameters">
                 <p>Parameter filter</p>
                 <ul id="parameters" class="container"></ul>
             </div>
+            
             <div dojoType="dijit.layout.TabContainer" region="center" tabPosition="bottom">
                 <div dojoType="dijit.layout.BorderContainer" design="headline" liveSplitter="true" title="Multi Display">
                     <div dojoType="dijit.layout.ContentPane" title="AND Display" id ="ANDTableContainer" region="left" splitter="true" style="width:50%"></div>
@@ -95,6 +97,7 @@
                 </div>
                 <div dojoType="dijit.layout.ContentPane" title="States Display" id="StatesTableContainer"></div>
                 <div dojoType="dijit.layout.ContentPane" title="Log View" id="LogViewContainer"></div>
+                <div dojoType="dijit.layout.ContentPane" title="Connections View" id="ConnectionsViewContainer"></div>
             </div>
         </div>
     </body>

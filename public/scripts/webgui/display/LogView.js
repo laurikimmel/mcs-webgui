@@ -61,8 +61,6 @@ dojo.declare("LogViewController", webgui.pac.Controller, {
     
     constructor: function(args) {
     
-        dojo.safeMixin(args);
-        
         var dataAbstraction = new LogViewAbstraction(this.limit);
         
         var presentation = new webgui.pac.GridPresentation({

@@ -10,6 +10,7 @@ dojo.require("webgui.display.GRAPHdisplay");
 dojo.require("webgui.display.DDDdisplay");
 dojo.require("webgui.display.ParameterDisplay");
 dojo.require("webgui.display.LogView");
+dojo.require("webgui.display.ConnectionsView");
 
 dojo.declare("webgui.assembly.Assembler", null, {
     
@@ -34,15 +35,19 @@ dojo.declare("webgui.assembly.Assembler", null, {
         
         //comet proxy TODO: add generic comm proxy class
 
-//        new webgui.comm.CometProxy({cometdUrl: "http://localhost:8086/cometd"});
+        new webgui.comm.CometProxy({cometdUrl: "http://localhost:8086/cometd"});
 //        new webgui.comm.WebSocketProxy();
-        new ParameterGenerator();
+//        new ParameterGenerator();
         
         // initialize Agents ...
+        new webgui.display.ConnectionsView();
         new webgui.display.ANDdisplay(parametersOnly);
         new webgui.display.SCDdisplay(parametersOnly);
         new webgui.display.GRAPHdisplay(parametersOnly);
-//        new webgui.display.DDDdisplay();
+        new webgui.display.DDDdisplay({ channels: [
+                                                   "/orbitalpredictions/live",
+//                                                   "/locationdefinitions/live,
+                                                   ] });
         new webgui.display.StateDisplay(parametersOnly);
         // for handling all parameters
         new webgui.display.ParameterDisplay(parametersOnly);
@@ -50,5 +55,6 @@ dojo.declare("webgui.assembly.Assembler", null, {
         // Log view listens other channel than parameter displays. 
         // Additionally limit of log entries is set here
         new webgui.display.LogView({ channels: ["/logs/live"], limit: 50 });
+        
     }
 });

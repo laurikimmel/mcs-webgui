@@ -83,7 +83,7 @@ dojo.declare("ANDController", webgui.pac.Controller, {
     divId: "ANDTable", // defaultId
     
     constructor: function(args) {
-        dojo.safeMixin(args);
+        
         var dataAbstraction = new ANDAbstraction();
         var presentation = new webgui.pac.GridPresentation({
             "domId": this.divId + "Container",
