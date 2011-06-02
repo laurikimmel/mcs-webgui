@@ -40,14 +40,6 @@ dojo.declare("X3DDataAbstraction", webgui.pac.Abstraction, {
             }
 
         };
-
-        //listens to topics to all channels broadcast to currently
-        var subscribeToTopic = function(subscription) {
-            msgbus.subscribe(subscription.topic, parameterHandler);
-        };
-
-        msgbus.subscribe("/request/subscribe", subscribeToTopic);
-
     }
 });
 
@@ -68,7 +60,7 @@ dojo.declare("X3DPresentation", webgui.pac.Presentation, {
  */
 dojo.declare("X3DController", webgui.pac.Controller, {
     
-    updateInterval: 100, //update interval in milliseconds
+//    updateInterval: 50, //update interval in milliseconds
     divId: "chartDiv", //defaultId
     
     constructor: function(args) {
@@ -84,10 +76,11 @@ dojo.declare("X3DController", webgui.pac.Controller, {
 //            [10:59:56.641] "[X3DController] channelHandler /locationdefinitions/live; {\"thresholdElevation\":0.08726646259971647,\"position\":{\"p1\":{\"clazz\":\"java.lang.Double\",\"value\":28.536275,\"objectid\":\"334543c8-4d0a-4511-99fd-156e385de8ec\",\"datasetidentifier\":0,\"name\":\"p1\",\"description\":\"Dimension 1 of vector.\",\"timestamp\":1306915196121},\"p2\":{\"clazz\":\"java.lang.Double\",\"value\":77.255859,\"objectid\":\"7d354339-a91c-471a-a8c4-32c5847c5857\",\"datasetidentifier\":0,\"name\":\"p2\",\"description\":\"Dimension 2 of vector.\",\"timestamp\":1306915196121},\"p3\":{\"clazz\":\"java.lang.Double\",\"value\":0,\"objectid\":\"66e3e0b3-7701-4d56-992d-7da9eaafcfd0\",\"datasetidentifier\":0,\"name\":\"p3\",\"description\":\"Dimension 3 of vector.\",\"timestamp\":1306915196121},\"objectid\":\"745687b0-176e-471c-bd86-4a5c5dfd96b5\",\"datasetidentifier\":0,\"name\":\"New Delhi\",\"description\":\"3D vector pointing to New Delhi, India\",\"timestamp\":1306915196121},\"objectid\":\"3732f246-28f1-4832-b564-563674bfa752\",\"datasetidentifier\":0,\"name\":\"New Delhi\",\"description\":\"Test ground station in India (New Delhi)\",\"timestamp\":1306915196122}"
 //            console.log("[X3DController] channelHandler " + channel + "; " + JSON.stringify(parameter));
             dataAbstraction.handleParameter(parameter);
+            updateView();
         }
 
 
-        setInterval(updateView, this.updateInterval);
+//        setInterval(updateView, this.updateInterval);
     }
 });
 
