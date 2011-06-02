@@ -5,7 +5,7 @@ dojo.require("webgui.pac.GridPresentation");
 dojo.require("webgui.pac.DndTargetable");
 
 dojo.require("dojo.data.ItemFileWriteStore");
-dojo.require("webgui.pac.Utils");
+dojo.require("webgui.common.Utils");
 
 // AND stands for Alphanumeric Display
 dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
@@ -45,7 +45,7 @@ dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
                     store.setValue(item, "name", parameter.name);
                     store.setValue(item, "value", parameter.value);
 //                        store.setValue(item, "type", parameter.clazz);
-                    var date = webgui.pac.Utils.formatDate(parameter.timestamp);
+                    var date = webgui.common.Utils.formatDate(parameter.timestamp);
                     store.setValue(item, "timestamp", date);
                 },
                 onError: function(er) {

@@ -4,7 +4,7 @@ dojo.require("webgui.pac.Controller");
 dojo.require("webgui.pac.Abstraction");
 dojo.require("webgui.pac.Presentation");
 dojo.require("webgui.pac.GridPresentation");
-dojo.require("webgui.pac.Utils");
+dojo.require("webgui.common.Utils");
 dojo.require("webgui.common.Constants");
 
 
@@ -27,14 +27,14 @@ dojo.declare("ConnectionsViewAbstraction", webgui.pac.Abstraction, {
                         if (size == 0) {
                             var item = {};
                             item.channel = channel;
-                            item.timestamp = webgui.pac.Utils.formatDate(new Date().getTime());
+                            item.timestamp = webgui.common.Utils.formatDate(new Date().getTime());
                             item.counter = 0;
                             item.status = "OK";
                             store.newItem(item);
                         }
                     },    
                     onItem: function(item) {
-                        store.setValue(item, "timestamp", webgui.pac.Utils.formatDate(new Date().getTime()));
+                        store.setValue(item, "timestamp", webgui.common.Utils.formatDate(new Date().getTime()));
                         store.setValue(item, "counter", parseInt(item.counter) + 1);
                     },
                     onError: function(er) {
@@ -54,7 +54,7 @@ dojo.declare("ConnectionsViewAbstraction", webgui.pac.Abstraction, {
                         if (size == 0) {
                             var item = {};
                             item.channel = channel;
-                            item.timestamp = webgui.pac.Utils.formatDate(new Date().getTime());
+                            item.timestamp = webgui.common.Utils.formatDate(new Date().getTime());
                             item.counter = 0;
                             item.status = status;
                             item.statusMessage = toString(statusMessage);

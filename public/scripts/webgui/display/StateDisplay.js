@@ -5,7 +5,7 @@ dojo.require("webgui.pac.Abstraction");
 dojo.require("webgui.pac.GridPresentation");
 //Stores
 dojo.require("dojo.data.ItemFileWriteStore");
-dojo.require("webgui.pac.Utils");
+dojo.require("webgui.common.Utils");
 
 dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
     
@@ -45,7 +45,7 @@ dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
                 onItem: function(item) {
                     store.setValue(item, "Name", parameter.name);
                     store.setValue(item, "State", parameter.state);
-                    store.setValue(item, "Timestamp", webgui.pac.Utils.formatDate(parameter.timestamp));
+                    store.setValue(item, "Timestamp", webgui.common.Utils.formatDate(parameter.timestamp));
                     store.setValue(item, "Description", parameter.description);
                 },
                 onError: function(er) {

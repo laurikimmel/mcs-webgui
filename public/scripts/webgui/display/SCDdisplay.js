@@ -6,7 +6,7 @@ dojo.require("webgui.pac.DndTargetable");
 
 dojo.require("dojo.data.ItemFileWriteStore");
 
-dojo.require("webgui.pac.Utils");
+dojo.require("webgui.common.Utils");
 
 // SCD stands for Scrolling Display
 dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
@@ -36,7 +36,7 @@ dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
                 storeElem[parameter.name + "Value"] = parameter.value;
                 storeElem.Name = parameter.name;
                 storeElem.Timestamp = parameter.timestamp;
-                storeElem.DisplayTime = webgui.pac.Utils.formatDate(parameter.timestamp);
+                storeElem.DisplayTime = webgui.common.Utils.formatDate(parameter.timestamp);
                 store.newItem(storeElem);
 
                 /* refactor, prolly need to use queries and different sort of table !!! */

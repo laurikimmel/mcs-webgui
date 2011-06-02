@@ -1,10 +1,10 @@
-dojo.provide("webgui.pac.Utils");
+dojo.provide("webgui.common.Utils");
 
 dojo.require("dojo.date.locale");
 
 var DEFAULT_FORMAT = "yyyy.D HH:mm:ss.SSS ZZZZ";
 
-webgui.pac.Utils.formatDate = function(timestamp) {
+webgui.common.Utils.formatDate = function(timestamp) {
     return format(new Date(timestamp), DEFAULT_FORMAT);
 }
 

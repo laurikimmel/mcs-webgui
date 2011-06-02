@@ -5,7 +5,7 @@ dojo.require("webgui.pac.Abstraction");
 dojo.require("webgui.pac.Presentation");
 dojo.require("webgui.pac.GridPresentation");
 dojo.require("dojox.uuid.generateRandomUuid");
-dojo.require("webgui.pac.Utils");
+dojo.require("webgui.common.Utils");
 
 
 dojo.declare("LogViewAbstraction", webgui.pac.Abstraction, {
@@ -28,7 +28,7 @@ dojo.declare("LogViewAbstraction", webgui.pac.Abstraction, {
             try {
                 var storeItem = {};
                 storeItem.id = dojox.uuid.generateRandomUuid();
-                storeItem.timestamp = webgui.pac.Utils.formatDate(logMessage.timeStamp);
+                storeItem.timestamp = webgui.common.Utils.formatDate(logMessage.timeStamp);
                 storeItem.message = logMessage.renderedMessage;
                 store.newItem(storeItem);
                 
