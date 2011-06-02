@@ -1,5 +1,7 @@
 dojo.provide("webgui.display.ConnectionsView");
 
+dojo.require("dojo.data.ItemFileWriteStore");
+
 dojo.require("webgui.pac.Controller");
 dojo.require("webgui.pac.Abstraction");
 dojo.require("webgui.pac.Presentation");
@@ -7,10 +9,9 @@ dojo.require("webgui.pac.GridPresentation");
 dojo.require("webgui.common.Utils");
 dojo.require("webgui.common.Constants");
 
-
 dojo.declare("ConnectionsViewAbstraction", webgui.pac.Abstraction, {
     
-    constructor: function(limit) {
+    constructor: function() {
         
         var key = "channel";
         var storedata = { identifier: key, items: [] };
@@ -92,17 +93,17 @@ dojo.declare("ConnectionsViewController", [webgui.pac.Controller, webgui.comm.Pr
         var dataAbstraction = new ConnectionsViewAbstraction();
         
         var presentation = new webgui.pac.GridPresentation({
-            "domId": this.divId + "Container",
-            "configuration": {
-                "id": this.divId,
-                "store": dataAbstraction.getStore(),
-                "clientSort": false,
-                "structure": [
-                    { "field": "channel", "name": "Channel", width: "200px" },
-                    { "field": "status", "name": "Status", width: "100px" },
-                    { "field": "counter", "name": "Messages", width: "100px" },
-                    { "field": "timestamp", "name": "Last Message", width: "200px" },
-                    { "field": "statusMessage", "name": "Status Message", width: "auto" },
+            domId: this.divId + "Container",
+            configuration: {
+                id: this.divId,
+                store: dataAbstraction.getStore(),
+                clientSort: false,
+                structure: [
+                    { field: "channel", name: "Channel", width: "200px" },
+                    { field: "status", name: "Status", width: "100px" },
+                    { field: "counter", name: "Messages", width: "100px" },
+                    { field: "timestamp", name: "Last Message", width: "200px" },
+                    { field: "statusMessage", name: "Status Message", width: "auto" },
                 ]
             }
         });
@@ -112,7 +113,7 @@ dojo.declare("ConnectionsViewController", [webgui.pac.Controller, webgui.comm.Pr
             console.log("[ConnectionsViewController]  added new channel " + channel);
             activeChannels.push(channel);
         };
-        
+
         msgbus.subscribe(TOPIC_CHANNEL_EVENT, dataAbstraction.handleChannelEvent);
     },
 
