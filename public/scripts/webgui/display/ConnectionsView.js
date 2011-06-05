@@ -63,7 +63,7 @@ dojo.declare("ConnectionsViewAbstraction", webgui.pac.Abstraction, {
                         }
                     },    
                     onItem: function(item) {
-                        store.setValue(item, "timestamp", webgui.pac.Utils.formatDate(new Date().getTime()));
+                        store.setValue(item, "timestamp", webgui.common.Utils.formatDate(new Date().getTime()));
                         store.setValue(item, "status", status);
                         store.setValue(item, "statusMessage", toString(statusMessage));
                     },
