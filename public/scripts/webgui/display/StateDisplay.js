@@ -11,7 +11,7 @@ dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
     
     constructor: function(args) {
     
-        var key = 'key';
+        var key = "key";
         var storedata = { identifier: key, items: [] };
         var store = new dojo.data.ItemFileWriteStore({ data: storedata });
         this.getStore = function() {
@@ -45,7 +45,7 @@ dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
                 onItem: function(item) {
                     store.setValue(item, "Name", parameter.name);
                     store.setValue(item, "State", parameter.state);
-                    store.setValue(item, "Timestamp", webgui.common.Utils.formatDate(parameter.timestamp));
+                    store.setValue(item, "Timestamp", parameter.timestamp);
                     store.setValue(item, "Description", parameter.description);
                 },
                 onError: function(er) {
@@ -86,23 +86,23 @@ dojo.declare("StatesController", webgui.pac.Controller, {
         var dataAbstraction = new StatesAbstraction();
         
         var presentation = new webgui.pac.GridPresentation({
-            "domId": this.divId + "Container",
-            "configuration": {
-                "id": this.divId,
-                "store": dataAbstraction.getStore(),
-                "clientSort": true,
-                "escapeHTMLInData": false,
-                "structure": [
-                    { "field": 'Name', "name": 'Name', "width": '200px' },
-                    { "field": 'State', "name": 'State', "width": '200px' },
-                    { "field": 'Timestamp', "name": 'Timestamp', "width": '200px' },
-                    { "field": 'Description', "name": 'Description', "width": 'auto' },
+            domId: this.divId + "Container",
+            configuration: {
+                id: this.divId,
+                store: dataAbstraction.getStore(),
+                clientSort: true,
+                escapeHTMLInData: false,
+                structure: [
+                    { field: "Name", name: "Name", width: "200px" },
+                    { field: "State", name: "State", width: "200px" },
+                    { field: "Timestamp", name: "Timestamp", width: "200px", formatter: webgui.common.Utils.formatDate },
+                    { field: "Description", name: "Description", width: "auto" },
                 ]
         }});
         
         presentation = webgui.pac.DndTargetable(presentation, {
-            "isSource": false,
-            "creator": function creator(item, hint) {
+            isSource: false,
+            creator: function creator(item, hint) {
                 console.log("item creator");
                 console.log(item);
                 console.log("hint: " + hint);

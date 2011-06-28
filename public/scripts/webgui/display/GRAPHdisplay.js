@@ -13,7 +13,7 @@ dojo.require("dojox.charting.action2d.Tooltip");
 dojo.declare("GRAPHAbstraction", webgui.pac.Abstraction, {
     
     constructor: function() {
-        var key = 'Timestamp';
+        var key = "Timestamp";
         var storedata = { identifier: key, items: [] };
         var store = new dojo.data.ItemFileWriteStore({ data: storedata });
         var viewParameters = [];
@@ -142,12 +142,12 @@ dojo.declare("GRAPHController", webgui.pac.Controller, {
         
         var dataAbstraction = new GRAPHAbstraction();
         var presentation = new GRAPHPresentation({
-            "domId": this.divId
+            domId: this.divId
         });
         
         presentation = webgui.pac.DndTargetable(presentation, {
-            "isSource": false,
-            "creator": function creator(item, hint) {
+            isSource: false,
+            creator: function creator(item, hint) {
                 console.log("item creator");
                 console.log(item);
                 console.log("hint: " + hint);
@@ -188,9 +188,9 @@ dojo.declare("GRAPHController", webgui.pac.Controller, {
         var updateViewCallback = function(item) {
             var seriesArrayData = getSeriesData(item.Name);
             if (seriesArrayData === false) {
-                presentation.getChart().addSeries(item.Name, [{ "x": item["Timestamp"], "y": item[item["Name"] + "Value"] }]/*, {stroke: {color: "#FFFF00"}, fill: "#FFFF00"}*/);
+                presentation.getChart().addSeries(item.Name, [{ x: item["Timestamp"], y: item[item["Name"] + "Value"] }]/*, {stroke: {color: "#FFFF00"}, fill: "#FFFF00"}*/);
             } else {
-                seriesArrayData.push({ "x": item["Timestamp"], "y": item[item["Name"] + "Value"] });
+                seriesArrayData.push({ x: item["Timestamp"], y: item[item["Name"] + "Value"] });
                 presentation.getChart().updateSeries(item.Name, seriesArrayData);
             }
         };

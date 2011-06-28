@@ -12,7 +12,7 @@ dojo.require("webgui.common.Utils");
 dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
     
     constructor: function() {
-        var key = 'Timestamp'; // TODO use some better identity key here
+        var key = "Timestamp"; // TODO use some better identity key here
         var storedata = { identifier: key, items: [] };
         var store = new dojo.data.ItemFileWriteStore({ data: storedata });
         var viewParameters = [];
@@ -36,7 +36,7 @@ dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
                 storeElem[parameter.name + "Value"] = parameter.value;
                 storeElem.Name = parameter.name;
                 storeElem.Timestamp = parameter.timestamp;
-                storeElem.DisplayTime = webgui.common.Utils.formatDate(parameter.timestamp);
+                storeElem.DisplayTime = parameter.timestamp;
                 store.newItem(storeElem);
 
                 /* refactor, prolly need to use queries and different sort of table !!! */
@@ -84,21 +84,21 @@ dojo.declare("SCDController", webgui.pac.Controller, {
         
         var dataAbstraction = new SCDAbstraction();        
         var presentation = new webgui.pac.GridPresentation({
-            "domId": this.divId + "Container",
-            "configuration": {
-                "id": this.divId,
-                "store": dataAbstraction.getStore(),
-                "clientSort": true,
-                "structure": [
-                    { "field": "DisplayTime", "name": "Timestamp", width: '200px' }
+            domId: this.divId + "Container",
+            configuration: {
+                id: this.divId,
+                store: dataAbstraction.getStore(),
+                clientSort: true,
+                structure: [
+                    { field: "DisplayTime", name: "Timestamp", width: "200px", formatter: webgui.common.Utils.formatDate }
                 ]
             }
         });
         
         // add DnD capability to the presentation
         presentation = webgui.pac.DndTargetable(presentation, {
-            "isSource": false,
-            "creator": function creator(item, hint) {
+            isSource: false,
+            creator: function creator(item, hint) {
                 console.log("item creator");
                 console.log(item);
                 console.log("hint: " + hint);
@@ -131,7 +131,7 @@ dojo.declare("SCDController", webgui.pac.Controller, {
 
             // if it doesn't, add it.
             if (!nameExists && gridStructure.length <= 5) { // TODO get rid of this magic number
-                gridStructure.push({ "field": item.parameter + "Value", "name": item.parameter, "width":  "120px" });
+                gridStructure.push({ field: item.parameter + "Value", name: item.parameter, width:  "120px" });
                 presentation.setGridStructure(gridStructure);
             }
             // scroll to the bottom of the list

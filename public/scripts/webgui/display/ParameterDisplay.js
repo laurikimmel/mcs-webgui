@@ -48,11 +48,11 @@ dojo.declare("ParameterController", webgui.pac.Controller, {
     constructor: function(args) {
 
         var presentation = new ParameterPresentation({
-            "domId": this.divId
+            domId: this.divId
         });
         // add DnD cabaility to the presentation
         presentation = webgui.pac.DndSourceable(presentation,{
-            "copyOnly": true
+            copyOnly: true
         });
         var dataAbstraction = new ParameterAbstraction();
 

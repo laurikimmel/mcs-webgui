@@ -12,9 +12,8 @@ dojo.require("webgui.common.Constants");
 dojo.declare("CommandListAbstraction", webgui.pac.Abstraction, {
     
     constructor: function() {
-        this.commands = []; 
         
-        var key = 'name';
+        var key = "name";
         var storedata = { identifier: key, items: [] };
         var store = new dojo.data.ItemFileWriteStore({ data: storedata });
         var viewParameters = [];
@@ -67,15 +66,15 @@ dojo.declare("CommandListController", webgui.pac.Controller, {
 
         var dataAbstraction = new CommandListAbstraction();
         var presentation = new webgui.pac.GridPresentation({
-            "domId": this.divId + "Container",
-            "configuration": {
-                "id": this.divId,
-                "store": dataAbstraction.getStore(),
-                "clientSort": true,
-                "structure": [
-                        { "field": "name", "name": "Name", width: "100%" },
+            domId: this.divId + "Container",
+            configuration: {
+                id: this.divId,
+                store: dataAbstraction.getStore(),
+                clientSort: true,
+                structure: [
+                        { field: "name", name: "Name", width: "100%" },
                 ],
-                "selectionMode" : "single",
+                selectionMode : "single",
             }
         });
         

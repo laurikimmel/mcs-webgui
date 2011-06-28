@@ -28,7 +28,7 @@ dojo.declare("LogViewAbstraction", webgui.pac.Abstraction, {
             try {
                 var storeItem = {};
                 storeItem.id = dojox.uuid.generateRandomUuid();
-                storeItem.timestamp = webgui.common.Utils.formatDate(logMessage.timeStamp);
+                storeItem.timestamp = logMessage.timeStamp;
                 storeItem.message = logMessage.renderedMessage;
                 store.newItem(storeItem);
                 
@@ -64,14 +64,14 @@ dojo.declare("LogViewController", webgui.pac.Controller, {
         var dataAbstraction = new LogViewAbstraction(this.limit);
         
         var presentation = new webgui.pac.GridPresentation({
-            "domId": this.divId + "Container",
-            "configuration": {
-                "id": this.divId,
-                "store": dataAbstraction.getStore(),
-                "clientSort": false,
-                "structure": [
-                    { "field": "timestamp", "name": "Timestamp", width: "200px" },
-                    { "field": "message", "name": "Message", width: "auto" },
+            domId: this.divId + "Container",
+            configuration: {
+                id: this.divId,
+                store: dataAbstraction.getStore(),
+                clientSort: false,
+                structure: [
+                    { field: "timestamp", name: "Timestamp", width: "200px", formatter: webgui.common.Utils.formatDate },
+                    { field: "message", name: "Message", width: "auto" },
                 ]
             }
         });

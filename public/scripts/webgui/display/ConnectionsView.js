@@ -28,14 +28,14 @@ dojo.declare("ConnectionsViewAbstraction", webgui.pac.Abstraction, {
                         if (size == 0) {
                             var item = {};
                             item.channel = channel;
-                            item.timestamp = webgui.common.Utils.formatDate(new Date().getTime());
+                            item.timestamp = new Date().getTime();
                             item.counter = 0;
                             item.status = "OK";
                             store.newItem(item);
                         }
                     },    
                     onItem: function(item) {
-                        store.setValue(item, "timestamp", webgui.common.Utils.formatDate(new Date().getTime()));
+                        store.setValue(item, "timestamp", new Date().getTime());
                         store.setValue(item, "counter", parseInt(item.counter) + 1);
                     },
                     onError: function(er) {
@@ -55,7 +55,7 @@ dojo.declare("ConnectionsViewAbstraction", webgui.pac.Abstraction, {
                         if (size == 0) {
                             var item = {};
                             item.channel = channel;
-                            item.timestamp = webgui.common.Utils.formatDate(new Date().getTime());
+                            item.timestamp = new Date().getTime();
                             item.counter = 0;
                             item.status = status;
                             item.statusMessage = toString(statusMessage);
@@ -63,7 +63,7 @@ dojo.declare("ConnectionsViewAbstraction", webgui.pac.Abstraction, {
                         }
                     },    
                     onItem: function(item) {
-                        store.setValue(item, "timestamp", webgui.common.Utils.formatDate(new Date().getTime()));
+                        store.setValue(item, "timestamp", new Date().getTime());
                         store.setValue(item, "status", status);
                         store.setValue(item, "statusMessage", toString(statusMessage));
                     },
@@ -102,7 +102,7 @@ dojo.declare("ConnectionsViewController", [webgui.pac.Controller, webgui.comm.Pr
                     { field: "channel", name: "Channel", width: "200px" },
                     { field: "status", name: "Status", width: "100px" },
                     { field: "counter", name: "Messages", width: "100px" },
-                    { field: "timestamp", name: "Last Message", width: "200px" },
+                    { field: "timestamp", name: "Last Message", width: "200px", formatter: webgui.common.Utils.formatDate },
                     { field: "statusMessage", name: "Status Message", width: "auto" },
                 ]
             }

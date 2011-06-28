@@ -11,7 +11,7 @@ dojo.require("webgui.common.Utils");
 dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
     
     constructor: function() {
-        var key = 'key';
+        var key = "key";
         var storedata = { identifier: key, items: [] };
         var store = new dojo.data.ItemFileWriteStore({ data: storedata });
         var viewParameters = [];
@@ -45,8 +45,7 @@ dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
                     store.setValue(item, "name", parameter.name);
                     store.setValue(item, "value", parameter.value);
 //                        store.setValue(item, "type", parameter.clazz);
-                    var date = webgui.common.Utils.formatDate(parameter.timestamp);
-                    store.setValue(item, "timestamp", date);
+                    store.setValue(item, "timestamp", parameter.timestamp);
                 },
                 onError: function(er) {
                     console.err(er);
@@ -86,17 +85,17 @@ dojo.declare("ANDController", webgui.pac.Controller, {
         
         var dataAbstraction = new ANDAbstraction();
         var presentation = new webgui.pac.GridPresentation({
-            "domId": this.divId + "Container",
-            "configuration": {
-                "id": this.divId,
-                "store": dataAbstraction.getStore(),
-                "clientSort": true,
-                "structure": [
-                        { "field": 'name', "name": 'Name', width: '200px' },
-                        { "field": 'value', "name": 'Value', width: '200px' },
+            domId: this.divId + "Container",
+            configuration: {
+                id: this.divId,
+                store: dataAbstraction.getStore(),
+                clientSort: true,
+                structure: [
+                        { field: "name", name: "Name", width: "200px" },
+                        { field: "value", name: "Value", width: "200px" },
 //                        { "field": 'unit', "name": 'Unit', width: '100px' },
-                        { "field": 'type', "name": 'Type', width: '100px' },
-                        { "field": 'timestamp', "name": 'Timestamp', width: '200px' },
+                        { field: "type", name: "Type", width: "100px" },
+                        { field: "timestamp", name: "Timestamp", width: "200px", formatter: webgui.common.Utils.formatDate  },
                 ]
             }
         });
@@ -104,8 +103,8 @@ dojo.declare("ANDController", webgui.pac.Controller, {
         // add DnD capability to the presentation 
 
         presentation = webgui.pac.DndTargetable(presentation, {
-            "isSource": false,
-            "creator": function creator(item, hint) {
+            isSource: false,
+            creator: function creator(item, hint) {
                 console.log("item creator");
                 console.log(item);
                 console.log("hint: " + hint);
