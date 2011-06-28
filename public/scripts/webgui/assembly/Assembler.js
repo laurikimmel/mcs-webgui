@@ -12,6 +12,7 @@ dojo.require("webgui.display.DDDdisplay");
 dojo.require("webgui.display.ParameterDisplay");
 dojo.require("webgui.display.LogView");
 dojo.require("webgui.display.ConnectionsView");
+dojo.require("webgui.display.CommandListView");
 
 dojo.declare("webgui.assembly.Assembler", null, {
     
@@ -56,6 +57,9 @@ dojo.declare("webgui.assembly.Assembler", null, {
         // Log view listens other channel than parameter displays. 
         // Additionally limit of log entries is set here
         new webgui.display.LogView({ channels: ["/logs/live"], limit: 50 });
+        
+        // command view
+        new webgui.display.CommandListView({ channels: ["/commanddefinitions/live"] });
         
     }
 });

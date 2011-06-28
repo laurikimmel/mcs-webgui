@@ -26,5 +26,9 @@ dojo.declare("webgui.pac.GridPresentation", webgui.pac.Presentation, {
         this.setGridStore = function(store) {
             grid.setStore(store);
         };
+        
+        this.getGrid = function() {
+            return grid;
+        };
     }
 });

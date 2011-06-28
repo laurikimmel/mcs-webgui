@@ -28,9 +28,13 @@
         </div>
         <div dojoType="dijit.layout.BorderContainer" id="borderContainer" design="sidebar" liveSplitters="false" gutters="true">
 
-            <div dojoType="dijit.layout.ContentPane" region="leading" splitter="false" id="ParameterContainer" style="width:200px" title="Parameters">
-                <p>Parameter filter</p>
-                <ul id="parameters" class="container"></ul>
+            <div dojoType="dijit.layout.TabContainer" region="leading" style="width:200px">
+                <div id="ParameterContainer" title="Parameters" dojoType="dijit.layout.ContentPane" >
+                    <!-- p>Parameter filter</p -->
+                    <ul id="parameters" class="container"></ul>
+                </div>
+                <div id="CommandContainer" title="Commands" dojoType="dijit.layout.ContentPane">
+                </div>
             </div>
             
             <div dojoType="dijit.layout.TabContainer" region="center" tabPosition="bottom">
@@ -49,7 +53,7 @@
                          <input type="button" value="Far Camera" onclick="document.getElementById('farCam').setAttribute('set_bind','true');"/>
                     </div>
                     <div class="x3domContainer">
-                        <x3d id="x3dElement" showStat="false" showLog="false" x="0px" y="0px" width="600px" height="600px" altImg="">
+                        <x3d xmlns="http://www.x3dom.org/x3dom" id="x3dElement" showStat="false" showLog="false" x="0px" y="0px" width="600px" height="600px" altImg="">
                             <scene def='scene'>
                                 <viewpoint id="closeCam" position="0 0 20000"></viewpoint>
                                 <viewpoint id="farCam" position="0 0 50000"></viewpoint>
