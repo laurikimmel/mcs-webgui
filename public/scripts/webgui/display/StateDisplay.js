@@ -6,6 +6,7 @@ dojo.require("webgui.pac.GridPresentation");
 //Stores
 dojo.require("dojo.data.ItemFileWriteStore");
 dojo.require("webgui.common.Utils");
+dojo.require("webgui.common.Constants");
 
 dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
     
@@ -107,9 +108,10 @@ dojo.declare("StatesController", webgui.pac.Controller, {
                 console.log(item);
                 console.log("hint: " + hint);
                 var n = document.createElement("div");
-                msgbus.publish("/viewparams/show", [{ parameter: item }]);
+                msgbus.publish("/viewparams/show", [{ parameter: item.name }]);
                 return { node: n, data: item };
-            }
+            },
+            accept: [DND_TYPE_PARAMETER],
         });
         
         this.channelHandler = function(message, channel) {

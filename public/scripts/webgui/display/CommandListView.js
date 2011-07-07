@@ -2,49 +2,29 @@ dojo.provide("webgui.display.CommandListView");
 dojo.require("webgui.pac.Controller");
 dojo.require("webgui.pac.Abstraction");
 dojo.require("webgui.pac.Presentation");
-dojo.require("webgui.pac.GridPresentation");
 dojo.require("webgui.common.Constants");
 
+dojo.require("dojo.store.Memory");
+dojo.require("dojo.store.Observable");
+dojo.require("dojo.dnd.Source");
 
 /**
- * No store currently required
+ * Using Dojo Object Storage
  */
 dojo.declare("CommandListAbstraction", webgui.pac.Abstraction, {
     
     constructor: function() {
         
-        var key = "name";
-        var storedata = { identifier: key, items: [] };
-        var store = new dojo.data.ItemFileWriteStore({ data: storedata });
-        var viewParameters = [];
+        var store = new dojo.store.Memory({idProperty: "name"});
         
         this.getStore = function() {
             return store;
         };
         
         this.handleCommand = function(command) {
-            store.fetch({ 
-                
-                query: { name: command.name },
-                
-                onBegin: function(size, request) {
-                    if (size == 0) {
-                        store.newItem(command);
-                    }
-                },    
-                onItem: function(item) {
-                    // TODO - update
-//                    store.setValue(item, "name", parameter.name);
-//                    store.setValue(item, "value", parameter.value);
-//                        store.setValue(item, "type", parameter.clazz);
-//                    var date = webgui.common.Utils.formatDate(parameter.timestamp);
-//                    store.setValue(item, "timestamp", date);
-                },
-                onError: function(er) {
-                    console.error("[CommandListView] commands query failed: " + er);
-                }
-            });
-            
+            //var query = store.query({name : command.name});
+            //console.log("[CommandListView] handle: " + command.name + "; count: " + query.length);
+            store.put(command);
         };
         
     },
@@ -52,7 +32,41 @@ dojo.declare("CommandListAbstraction", webgui.pac.Abstraction, {
 });
 
 dojo.declare("CommandListPresentation", webgui.pac.Presentation, {
-    constructor: function() { }
+    
+    constructor: function(store, containerId) {
+
+        store = dojo.store.Observable(store);
+        
+        var dndSource = new dojo.dnd.Source(containerId, 
+                {
+                    copyOnly: true, 
+                    creator: nodeCreator,
+                    singular: true,
+                });
+
+        function nodeCreator(command, hint) {
+            var li = document.createElement("div");
+            li.innerHTML = command.name;
+            return {
+                node: li,
+                data: command,
+                type: [DND_TYPE_COMMAND],
+            };
+        }
+        
+        var all = store.query();
+        all.observe(function(command, removedFrom, insertedInto) {
+            //console.log("[CommandListView] updated " + command.name + "; removedFrom: " + removedFrom + "; insertedInto: " + insertedInto);
+            if (removedFrom > -1) { 
+                // existing object removed
+                // TODO - implement
+            }
+            if (insertedInto > -1) { 
+                // new or updated object inserted
+                dndSource.insertNodes(false, [command]);
+            }
+        });
+    }
 });
 
 /**
@@ -60,39 +74,24 @@ dojo.declare("CommandListPresentation", webgui.pac.Presentation, {
  */
 dojo.declare("CommandListController", webgui.pac.Controller, {
     
-    divId: "Command", // defaultId
+//    divId: "Command", // defaultId
+    containerId: "commands",
     
     constructor: function(args) {
+        dojo.safeMixin(args);
 
         var dataAbstraction = new CommandListAbstraction();
-        var presentation = new webgui.pac.GridPresentation({
-            domId: this.divId + "Container",
-            configuration: {
-                id: this.divId,
-                store: dataAbstraction.getStore(),
-                clientSort: true,
-                structure: [
-                        { field: "name", name: "Name", width: "100%" },
-                ],
-                selectionMode : "single",
-            }
-        });
+        var presentation = new CommandListPresentation(dataAbstraction.getStore(), this.containerId);
         
-        // publish selection events to public topic
-        dojo.connect(presentation.getGrid(), "onRowClick", function(e) {
-            var command = e.grid.getItem(e.rowIndex);
-            msgbus.publish(TOPIC_COMMAND_SELECTION, [command]);
-        });
+//        // publish selection events to public topic
+//        dojo.connect(presentation.getGrid(), "onRowClick", function(e) {
+//            var command = e.grid.getItem(e.rowIndex);
+//            msgbus.publish(TOPIC_COMMAND_SELECTION, [command]);
+//        });
         
 //        msgbus.subscribe(TOPIC_COMMAND_SELECTION, function (command) {
 //            console.log("Selected: " + command.name + "; " + command.timestamp);
 //        });
-
-        
-        // hide table header
-        var query = "#" + this.divId + "Container .dojoxGridHeader"; 
-//        console.log("*** N: " + dojo.query(query).length);
-        dojo.style(dojo.query(query)[0], "display", "none");
 
         this.channelHandler = function(command, channel) {
 //            console.log("*** " + JSON.stringify(command));

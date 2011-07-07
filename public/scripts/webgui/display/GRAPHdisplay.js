@@ -2,6 +2,7 @@
 dojo.require("webgui.pac.Controller");
 dojo.require("webgui.pac.Abstraction");
 dojo.require("webgui.pac.Presentation");
+dojo.require("webgui.common.Constants");
 
 // For Chart Views
 dojo.require("dojox.charting.widget.Chart2D");
@@ -152,9 +153,10 @@ dojo.declare("GRAPHController", webgui.pac.Controller, {
                 console.log(item);
                 console.log("hint: " + hint);
                 var n = document.createElement("div");
-                msgbus.publish("/viewparams/show", [{ parameter:item }]);
+                msgbus.publish("/viewparams/show", [{ parameter:item.name }]);
                 return {node: n, data: item};
-            }
+            },
+            accept: [DND_TYPE_PARAMETER],
         });
         
         this.channelHandler = function(parameter, channel) {
