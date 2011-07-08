@@ -1,12 +1,10 @@
 dojo.provide("webgui.display.CommandListView");
+
 dojo.require("webgui.pac.Controller");
 dojo.require("webgui.pac.Abstraction");
-dojo.require("webgui.pac.Presentation");
+dojo.require("webgui.pac.ListPresentation");
 dojo.require("webgui.common.Constants");
-
 dojo.require("dojo.store.Memory");
-dojo.require("dojo.store.Observable");
-dojo.require("dojo.dnd.Source");
 
 /**
  * Using Dojo Object Storage
@@ -31,44 +29,6 @@ dojo.declare("CommandListAbstraction", webgui.pac.Abstraction, {
     
 });
 
-dojo.declare("CommandListPresentation", webgui.pac.Presentation, {
-    
-    constructor: function(store, containerId) {
-
-        store = dojo.store.Observable(store);
-        
-        var dndSource = new dojo.dnd.Source(containerId, 
-                {
-                    copyOnly: true, 
-                    creator: nodeCreator,
-                    singular: true,
-                });
-
-        function nodeCreator(command, hint) {
-            var li = document.createElement("div");
-            li.innerHTML = command.name;
-            return {
-                node: li,
-                data: command,
-                type: [DND_TYPE_COMMAND],
-            };
-        }
-        
-        var all = store.query();
-        all.observe(function(command, removedFrom, insertedInto) {
-            //console.log("[CommandListView] updated " + command.name + "; removedFrom: " + removedFrom + "; insertedInto: " + insertedInto);
-            if (removedFrom > -1) { 
-                // existing object removed
-                // TODO - implement
-            }
-            if (insertedInto > -1) { 
-                // new or updated object inserted
-                dndSource.insertNodes(false, [command]);
-            }
-        });
-    }
-});
-
 /**
  * Command selection screen controller
  */
@@ -81,13 +41,12 @@ dojo.declare("CommandListController", webgui.pac.Controller, {
         dojo.safeMixin(args);
 
         var dataAbstraction = new CommandListAbstraction();
-        var presentation = new CommandListPresentation(dataAbstraction.getStore(), this.containerId);
-        
-//        // publish selection events to public topic
-//        dojo.connect(presentation.getGrid(), "onRowClick", function(e) {
-//            var command = e.grid.getItem(e.rowIndex);
-//            msgbus.publish(TOPIC_COMMAND_SELECTION, [command]);
-//        });
+        var presentation = new webgui.pac.ListPresentation({
+            store: dataAbstraction.getStore(), 
+            containerId: this.containerId,
+            dndTypes: [DND_TYPE_COMMAND],
+        });
+
         
 //        msgbus.subscribe(TOPIC_COMMAND_SELECTION, function (command) {
 //            console.log("Selected: " + command.name + "; " + command.timestamp);

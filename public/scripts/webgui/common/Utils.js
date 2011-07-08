@@ -26,5 +26,5 @@ webgui.common.Utils.hashCode = function(str) {
             hash = 31 * hash + char;
             hash = hash & hash; // Convert to 32bit integer
     }
-    return hash;
+    return hash.toString(16);
 }
