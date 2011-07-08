@@ -22,11 +22,13 @@ dojo.declare("webgui.pac.ListPresentation", webgui.pac.Presentation, {
         var all = store.query();
         
         all.observe(dojo.hitch(this, this.dataUpdateHandler), true); // true to listen objects property changes
-        
-//      dojo.connect(dndSource, "onMouseDown", dndSource, function(e) {
-//          var command = dndSource.getItem(e.target.id).data;
-//          msgbus.publish(TOPIC_COMMAND_SELECTION, [command]);
-//      });
+
+        if (this.selectionTopic != null) {
+            dojo.connect(this.dndSource, "onMouseDown", this.dndSource, dojo.hitch(this, function(e) {
+                var data = this.dndSource.getItem(e.target.id).data;
+                msgbus.publish(this.selectionTopic, [data]);
+            }));
+        }
 
 
         // TODO - figure out way to listen all of the dnd drops originated from this view.

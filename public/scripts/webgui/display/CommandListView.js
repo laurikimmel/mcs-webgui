@@ -45,11 +45,11 @@ dojo.declare("CommandListController", webgui.pac.Controller, {
             store: dataAbstraction.getStore(), 
             containerId: this.containerId,
             dndTypes: [DND_TYPE_COMMAND],
+            selectionTopic: TOPIC_SELECTION_COMMAND,
         });
 
-        
-//        msgbus.subscribe(TOPIC_COMMAND_SELECTION, function (command) {
-//            console.log("Selected: " + command.name + "; " + command.timestamp);
+//        msgbus.subscribe(TOPIC_SELECTION_COMMAND, function (command) {
+//            console.log("Selected COMMAND: " + command.name + "; " + command.timestamp);
 //        });
 
         this.channelHandler = function(command, channel) {
