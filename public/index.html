@@ -38,7 +38,7 @@
                 </div>
             </div>
             
-            <div dojoType="dijit.layout.TabContainer" region="center" tabPosition="bottom">
+            <div dojoType="dijit.layout.TabContainer" region="center" tabPosition="bottom" id="DetailsView">
                 <div dojoType="dijit.layout.BorderContainer" design="headline" liveSplitter="true" title="Multi Display">
                     <div dojoType="dijit.layout.ContentPane" title="AND Display" id ="ANDTableContainer" region="left" splitter="true" style="width:50%"></div>
                     <div dojoType="dijit.layout.ContentPane" title="SCD Display" id="SCDTableContainer" region="center" splitter="true"></div>
@@ -103,6 +103,9 @@
                 <div dojoType="dijit.layout.ContentPane" title="States Display" id="StatesTableContainer"></div>
                 <div dojoType="dijit.layout.ContentPane" title="Log View" id="LogViewContainer"></div>
                 <div dojoType="dijit.layout.ContentPane" title="Connections View" id="ConnectionsViewContainer"></div>
+                <div dojoType="dijit.layout.ContentPane" title="Command View" id="CommandView">
+                    <div id="CommandViewContainer"></div>
+                </div>
             </div>
         </div>
     </body>

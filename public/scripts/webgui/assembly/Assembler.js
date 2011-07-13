@@ -13,6 +13,7 @@ dojo.require("webgui.display.ParameterDisplay");
 dojo.require("webgui.display.LogView");
 dojo.require("webgui.display.ConnectionsView");
 dojo.require("webgui.display.CommandListView");
+dojo.require("webgui.display.CommandView");
 
 dojo.declare("webgui.assembly.Assembler", null, {
     
@@ -60,6 +61,7 @@ dojo.declare("webgui.assembly.Assembler", null, {
         
         // command view
         new webgui.display.CommandListView({ channels: ["/commanddefinitions/live"] });
+        new webgui.display.CommandView();
         
     }
 });
