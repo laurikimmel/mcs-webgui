@@ -9,9 +9,9 @@ dojo.require("webgui.common.Utils");
 dojo.require("webgui.common.Constants");
 
 dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
-    
+
     constructor: function(args) {
-    
+
         var key = "key";
         var storedata = { identifier: key, items: [] };
         var store = new dojo.data.ItemFileWriteStore({ data: storedata });
@@ -19,20 +19,20 @@ dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
             return store;
         };
         var viewParameters = [];
-        
+
         this.handleParameter = function(parameter) {
 //            console.log("[StateParameterStore] received " + JSON.stringify(parameter));
-            
+
             // TODO refactor this filtering using the controller
             if (!viewParameters[parameter.name] || viewParameters[parameter.name] === false) {
                 return;
             }
-            
+
 //            if(parameter.unit !== "") {
 //                return;
 //            }
 //            console.log("Here");
-            
+
             parameter.key = parameter.name;
             parameter.state = '<div class="stateTable' + (parameter.value == true ? "True" : "False") + '">' + parameter.value + '</div>';
 
@@ -54,13 +54,13 @@ dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
                 }
             });
         };
-       
+
         // parameter hiding and showing
         function addViewParameter(item) {
             console.log("States display addViewParameter for ");
             viewParameters[item.parameter] = true;
         }
-        
+
         function hideViewParameter(item) {
             console.log("States display hideViewParameter for ");
             viewParameters[item.parameter] = false;
@@ -73,19 +73,19 @@ dojo.declare("StatesAbstraction", webgui.pac.Abstraction, {
                 }
             });
         };
-        msgbus.subscribe("/viewparams/show", addViewParameter);
-        msgbus.subscribe("/viewparams/hide", hideViewParameter);
+        webgui.msgbus.subscribe("/viewparams/show", addViewParameter);
+        webgui.msgbus.subscribe("/viewparams/hide", hideViewParameter);
     }
 });
 
 dojo.declare("StatesController", webgui.pac.Controller, {
-    
+
     divId: "StatesTable", // defaultId
-    
+
     constructor: function(args) {
-        
+
         var dataAbstraction = new StatesAbstraction();
-        
+
         var presentation = new webgui.pac.GridPresentation({
             domId: this.divId + "Container",
             configuration: {
@@ -100,7 +100,7 @@ dojo.declare("StatesController", webgui.pac.Controller, {
                     { field: "Description", name: "Description", width: "auto" },
                 ]
         }});
-        
+
         presentation = webgui.pac.DndTargetable(presentation, {
             isSource: false,
             creator: function creator(item, hint) {
@@ -108,12 +108,12 @@ dojo.declare("StatesController", webgui.pac.Controller, {
                 console.log(item);
                 console.log("hint: " + hint);
                 var n = document.createElement("div");
-                msgbus.publish("/viewparams/show", [{ parameter: item.name }]);
+                webgui.msgbus.publish("/viewparams/show", [{ parameter: item.name }]);
                 return { node: n, data: item };
             },
-            accept: [DND_TYPE_PARAMETER],
+            accept: [webgui.common.Constants.DND_TYPE_PARAMETER],
         });
-        
+
         this.channelHandler = function(message, channel) {
             dataAbstraction.handleParameter(message);
         };

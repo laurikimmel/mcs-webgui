@@ -10,7 +10,7 @@ dojo.require("webgui.common.Constants");
 
 // AND stands for Alphanumeric Display
 dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
-    
+
     constructor: function() {
         var key = "key";
         var storedata = { identifier: key, items: [] };
@@ -19,7 +19,7 @@ dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
         this.getStore = function() {
             return store;
         };
-            
+
         this.handleParameter = function(parameter) {
                 /* console.log("[ANDParameterStore] received " + JSON.stringify(parameter)); */
 //              var str = "Parameter:";
@@ -27,21 +27,21 @@ dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
 //                  str += " " + key + "->" + parameter[key] + "; ";
 //              }
 //              console.info(str);
-//             [15:36:02.055] "Parameter: value->0 clazz->java.lang.Double objectid->dad653b8-f27e-488f-81b2-01ea9b7acebb datasetidentifier->0 name->Payload Deployment State description->The State of the Payload Deployment. '1' means deployed. '0' means not-deployed. timestamp->1306240560830"            
+//             [15:36:02.055] "Parameter: value->0 clazz->java.lang.Double objectid->dad653b8-f27e-488f-81b2-01ea9b7acebb datasetidentifier->0 name->Payload Deployment State description->The State of the Payload Deployment. '1' means deployed. '0' means not-deployed. timestamp->1306240560830"
                 // TODO refactor this filtering using the controller
             if (!viewParameters[parameter.name] || viewParameters[parameter.name] === false) {
                 return;
             }
-                
+
             parameter.key = parameter.name;
-            
+
             // AND display store logic
             store.fetch({ query: { key:parameter.name },
                 onBegin: function(size, request) {
                     if (size == 0) {
                         store.newItem(parameter);
                     }
-                },    
+                },
                 onItem: function(item) {
                     store.setValue(item, "name", parameter.name);
                     store.setValue(item, "value", parameter.value);
@@ -53,7 +53,7 @@ dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
                 }
             });
         }
-        
+
         // parameter hiding and showing
         function addViewParameter(item) {
             console.log("AND display addViewParameter for ");
@@ -72,18 +72,18 @@ dojo.declare("ANDAbstraction", webgui.pac.Abstraction, {
                 }
             });
         };
-        
-        msgbus.subscribe("/viewparams/show", addViewParameter);
-        msgbus.subscribe("/viewparams/hide", hideViewParameter);
+
+        webgui.msgbus.subscribe("/viewparams/show", addViewParameter);
+        webgui.msgbus.subscribe("/viewparams/hide", hideViewParameter);
     }
 });
 
 dojo.declare("ANDController", webgui.pac.Controller, {
-    
+
     divId: "ANDTable", // defaultId
-    
+
     constructor: function(args) {
-        
+
         var dataAbstraction = new ANDAbstraction();
         var presentation = new webgui.pac.GridPresentation({
             domId: this.divId + "Container",
@@ -101,7 +101,7 @@ dojo.declare("ANDController", webgui.pac.Controller, {
             }
         });
 
-        // add DnD capability to the presentation 
+        // add DnD capability to the presentation
 
         presentation = webgui.pac.DndTargetable(presentation, {
             isSource: false,
@@ -110,12 +110,12 @@ dojo.declare("ANDController", webgui.pac.Controller, {
                 console.log(item);
                 console.log("hint: " + hint);
                 var n = document.createElement("div");
-                msgbus.publish("/viewparams/show", [{ parameter:item.name }]);
+                webgui.msgbus.publish("/viewparams/show", [{ parameter:item.name }]);
                 return {node: n, data: item};
             },
-            accept: [DND_TYPE_PARAMETER],
+            accept: [webgui.common.Constants.DND_TYPE_PARAMETER],
         });
-         
+
         this.channelHandler = function(parameter, channel) {
             dataAbstraction.handleParameter(parameter);
         }

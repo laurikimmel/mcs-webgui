@@ -9,9 +9,9 @@ dojo.require("webgui.pac.Presentation");
  * No store currently required
  */
 dojo.declare("X3DDataAbstraction", webgui.pac.Abstraction, {
-    
+
     constructor: function() {
-        
+
         var satellite = {};
 
         /**
@@ -59,10 +59,10 @@ dojo.declare("X3DPresentation", webgui.pac.Presentation, {
  * 3D-display controller
  */
 dojo.declare("X3DController", webgui.pac.Controller, {
-    
+
 //    updateInterval: 50, //update interval in milliseconds
     divId: "chartDiv", //defaultId
-    
+
     constructor: function(args) {
         var converter = new CartesianConverter();
         var dataAbstraction = new X3DDataAbstraction();
@@ -71,7 +71,7 @@ dojo.declare("X3DController", webgui.pac.Controller, {
         var updateView = function() {
             presentation.refreshView(converter.convertItem(dataAbstraction.getsatellite()));
         };
-        
+
         this.channelHandler = function(parameter, channel) {
 //            [10:59:56.641] "[X3DController] channelHandler /locationdefinitions/live; {\"thresholdElevation\":0.08726646259971647,\"position\":{\"p1\":{\"clazz\":\"java.lang.Double\",\"value\":28.536275,\"objectid\":\"334543c8-4d0a-4511-99fd-156e385de8ec\",\"datasetidentifier\":0,\"name\":\"p1\",\"description\":\"Dimension 1 of vector.\",\"timestamp\":1306915196121},\"p2\":{\"clazz\":\"java.lang.Double\",\"value\":77.255859,\"objectid\":\"7d354339-a91c-471a-a8c4-32c5847c5857\",\"datasetidentifier\":0,\"name\":\"p2\",\"description\":\"Dimension 2 of vector.\",\"timestamp\":1306915196121},\"p3\":{\"clazz\":\"java.lang.Double\",\"value\":0,\"objectid\":\"66e3e0b3-7701-4d56-992d-7da9eaafcfd0\",\"datasetidentifier\":0,\"name\":\"p3\",\"description\":\"Dimension 3 of vector.\",\"timestamp\":1306915196121},\"objectid\":\"745687b0-176e-471c-bd86-4a5c5dfd96b5\",\"datasetidentifier\":0,\"name\":\"New Delhi\",\"description\":\"3D vector pointing to New Delhi, India\",\"timestamp\":1306915196121},\"objectid\":\"3732f246-28f1-4832-b564-563674bfa752\",\"datasetidentifier\":0,\"name\":\"New Delhi\",\"description\":\"Test ground station in India (New Delhi)\",\"timestamp\":1306915196122}"
 //            console.log("[X3DController] channelHandler " + channel + "; " + JSON.stringify(parameter));
@@ -86,6 +86,7 @@ dojo.declare("X3DController", webgui.pac.Controller, {
 
 dojo.declare("webgui.display.DDDdisplay", null, {
     constructor: function(args) {
+        console.log("[DDDdisplay] initializing components ...");
         var controller = new X3DController(args);
         controller.subscribe();
     }

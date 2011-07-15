@@ -38,12 +38,12 @@ dojo.declare("webgui.comm.CometProxy", webgui.comm.ProxyBase, {
     connect: function (channel, activeChannels) {
         var handle = this.io.subscribe(channel, this.publishToInnerBus);
         handle.addCallback(dojo.hitch(this, function() {
-            webgui.msgbus.publish(TOPIC_CHANNEL_EVENT, [channel, "Connected"]);
+            webgui.msgbus.publish(webgui.common.Constants.TOPIC_CHANNEL_EVENT, [channel, "Connected", "CometProxy"]);
             console.log("[CometProxy] channel " + handle.args[0] + " is active now; total channels " + this.activeChannels.length);
         }));
         activeChannels.push(channel);
-        webgui.msgbus.publish(TOPIC_CHANNEL_EVENT, [channel, "Connecting"]);
+        webgui.msgbus.publish(webgui.common.Constants.TOPIC_CHANNEL_EVENT, [channel, "Connecting", "CometProxy"]);
         console.log("[CometProxy] added new channel: " + channel);
     },
-    
+
 });

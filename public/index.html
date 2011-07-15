@@ -5,21 +5,25 @@
         <title>WebGUI</title>
 
         <style type="text/css">
-            @import url("scripts/dojo-1.6.1/dijit/themes/claro/claro.css");
-            @import url("scripts/dojo-1.6.1/dojox/grid/resources/Grid.css");
-            @import url("scripts/dojo-1.6.1/dojox/grid/resources/claroGrid.css");
-            @import url("scripts/dojo-1.6.1/dojo/resources/dnd.css");
+            @import url("http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dijit/themes/claro/claro.css");
+            @import url("http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojox/grid/resources/Grid.css");
+            @import url("http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojox/grid/resources/claroGrid.css");
+            @import url("http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/resources/dnd.css");
             @import url("styles/styles.css");
             @import url("styles/x3dom.css");
         </style>
 
-        <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.5/dojo/dojo.xd.js" djConfig="parseOnLoad: false"></script> -->
         <script type="text/javascript" src="http://www.x3dom.org/x3dom/release/x3dom.js"></script>
-        <script type="text/javascript" src="scripts/dojo-1.6.1/dojo/dojo.js" djConfig="parseOnLoad: false"></script>
         <script type="text/javascript">
-            dojo.registerModulePath("webgui","../../webgui");
+            djConfig = {
+                parseOnLoad: false,
+                isDebug: true,
+                baseUrl: "./scripts/",
+                modulePaths: { webgui: "webgui" },
+            };
         </script>
-        <script type="text/javascript" src="scripts/webgui/script.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js"></script>
+        <script type="text/javascript" src="scripts/webgui/loader.js"></script>
 
     </head>
     <body class="claro">

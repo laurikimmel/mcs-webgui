@@ -6,21 +6,22 @@ dojo.require("webgui.pac.Controller");
 dojo.require("webgui.pac.Abstraction");
 dojo.require("webgui.pac.Presentation");
 dojo.require("webgui.pac.GridPresentation");
+dojo.require("webgui.comm.ProxyBase");
 dojo.require("webgui.common.Utils");
 dojo.require("webgui.common.Constants");
 
 dojo.declare("ConnectionsViewAbstraction", webgui.pac.Abstraction, {
-    
+
     constructor: function() {
-        
+
         var key = "channel";
         var storedata = { identifier: key, items: [] };
         var store = new dojo.data.ItemFileWriteStore({ data: storedata });
-        
+
         this.getStore = function() {
             return store;
         };
-        
+
         this.handleMessage = function(message, channel) {
             try {
                 store.fetch({ query: { channel: channel },
@@ -33,7 +34,7 @@ dojo.declare("ConnectionsViewAbstraction", webgui.pac.Abstraction, {
                             item.status = "OK";
                             store.newItem(item);
                         }
-                    },    
+                    },
                     onItem: function(item) {
                         store.setValue(item, "timestamp", new Date().getTime());
                         store.setValue(item, "counter", parseInt(item.counter) + 1);
@@ -44,11 +45,11 @@ dojo.declare("ConnectionsViewAbstraction", webgui.pac.Abstraction, {
                 });
             }
             catch (e) {
-                console.log("Failed to handle message on channel " + channel + "; " + e);
+                console.error("[ConnectionsView] Failed to handle message on channel " + channel + "; " + e);
             }
         };
-        
-        this.handleChannelEvent = function(channel, status, statusMessage) {
+
+        this.handleChannelEvent = function(channel, status, source, statusMessage) {
             try {
                 store.fetch({ query: { channel: channel },
                     onBegin: function(size, request) {
@@ -59,13 +60,15 @@ dojo.declare("ConnectionsViewAbstraction", webgui.pac.Abstraction, {
                             item.counter = 0;
                             item.status = status;
                             item.statusMessage = toString(statusMessage);
+                            item.source = source;
                             store.newItem(item);
                         }
-                    },    
+                    },
                     onItem: function(item) {
                         store.setValue(item, "timestamp", new Date().getTime());
                         store.setValue(item, "status", status);
                         store.setValue(item, "statusMessage", toString(statusMessage));
+                        store.setValue(item, "source", source);
                     },
                     onError: function(er) {
                         console.err(er);
@@ -73,26 +76,26 @@ dojo.declare("ConnectionsViewAbstraction", webgui.pac.Abstraction, {
                 });
             }
             catch (e) {
-                console.log("Failed to handle channel event " + channel + "; status: " + status + "; " + e);
+                console.error("[ConnectionsView] Failed to handle channel event " + channel + "; status: " + status + "; " + e);
             }
         };
-        
+
         function toString(statusMessage) {
             return statusMessage == null ? "" : statusMessage;
         }
-        
+
     },
 });
 
 dojo.declare("ConnectionsViewController", [webgui.pac.Controller, webgui.comm.ProxyBase], {
-    
+
     divId: "ConnectionsView", // defaultId
-    
+
     constructor: function(args) {
-        
+
         var dataAbstraction = new ConnectionsViewAbstraction();
-        
-        var presentation = new webgui.pac.GridPresentation({
+
+        new webgui.pac.GridPresentation({
             domId: this.divId + "Container",
             configuration: {
                 id: this.divId,
@@ -103,18 +106,19 @@ dojo.declare("ConnectionsViewController", [webgui.pac.Controller, webgui.comm.Pr
                     { field: "status", name: "Status", width: "100px" },
                     { field: "counter", name: "Messages", width: "100px" },
                     { field: "timestamp", name: "Last Message", width: "200px", formatter: webgui.common.Utils.formatDate },
+                    { field: "source", name: "Source", width: "100px" },
                     { field: "statusMessage", name: "Status Message", width: "auto" },
                 ]
             }
         });
-        
+
         this.connect = function(channel, activeChannels) {
-            dojo.hitch(this, msgbus.subscribe(channel, dataAbstraction.handleMessage));
+            dojo.hitch(this, webgui.msgbus.subscribe(channel, dataAbstraction.handleMessage));
             console.log("[ConnectionsViewController]  added new channel " + channel);
             activeChannels.push(channel);
         };
 
-        msgbus.subscribe(TOPIC_CHANNEL_EVENT, dataAbstraction.handleChannelEvent);
+        webgui.msgbus.subscribe(webgui.common.Constants.TOPIC_CHANNEL_EVENT, dataAbstraction.handleChannelEvent);
     },
 
 });
@@ -122,6 +126,6 @@ dojo.declare("ConnectionsViewController", [webgui.pac.Controller, webgui.comm.Pr
 dojo.declare("webgui.display.ConnectionsView", null, {
     constructor: function(args) {
         console.log("[ConnectionsView] init ...");
-        var controller = new ConnectionsViewController(args);
+        new ConnectionsViewController(args);
     }
 });

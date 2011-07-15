@@ -6,12 +6,13 @@ dojo.require("webgui.pac.DndTargetable");
 
 dojo.require("dojo.data.ItemFileWriteStore");
 
+//dojo.require("webgui.msgbus");
 dojo.require("webgui.common.Utils");
 dojo.require("webgui.common.Constants");
 
 // SCD stands for Scrolling Display
 dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
-    
+
     constructor: function() {
         var key = "Timestamp"; // TODO use some better identity key here
         var storedata = { identifier: key, items: [] };
@@ -20,7 +21,7 @@ dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
         this.getStore = function() {
             return store;
         };
-        
+
         // for removing from store TODO refactor
         var counter = 0;
         var limit = 40;
@@ -45,7 +46,7 @@ dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
                 if (counter > limit) {
                     // getting the size of the store
                     var size = function(size, request) {
-                        // remove excess elements 
+                        // remove excess elements
                         store.fetch({count: (size - limit),
                             onItem: function(item) {
                                 store.deleteItem(item);
@@ -65,25 +66,25 @@ dojo.declare("SCDAbstraction", webgui.pac.Abstraction, {
         function addViewParameter(item) {
             viewParameters[item.parameter] = true;
         }
-        
+
         function hideViewParameter(item) {
             viewParameters[item.parameter] = false;
         }
 
-        msgbus.subscribe("/viewparams/show", addViewParameter);
-        msgbus.subscribe("/viewparams/hide", hideViewParameter);
+        webgui.msgbus.subscribe("/viewparams/show", addViewParameter);
+        webgui.msgbus.subscribe("/viewparams/hide", hideViewParameter);
 
     }
 });
 
 dojo.declare("SCDController", webgui.pac.Controller, {
-    
+
     divId: "SCDTable", // defaultId
     columnLimit: 5, // XXX - not used! - maximum number of parameters shown, based on order received
-    
+
     constructor: function(args) {
-        
-        var dataAbstraction = new SCDAbstraction();        
+
+        var dataAbstraction = new SCDAbstraction();
         var presentation = new webgui.pac.GridPresentation({
             domId: this.divId + "Container",
             configuration: {
@@ -95,7 +96,7 @@ dojo.declare("SCDController", webgui.pac.Controller, {
                 ]
             }
         });
-        
+
         // add DnD capability to the presentation
         presentation = webgui.pac.DndTargetable(presentation, {
             isSource: false,
@@ -104,13 +105,13 @@ dojo.declare("SCDController", webgui.pac.Controller, {
                 console.log(item);
                 console.log("hint: " + hint);
                 var n = document.createElement("div");
-                msgbus.publish("/viewparams/show", [{ parameter:item.name }]);
+                webgui.msgbus.publish("/viewparams/show", [{ parameter:item.name }]);
                 return { node: n, data: item };
             },
-            accept: [DND_TYPE_PARAMETER],
-        
+            accept: [webgui.common.Constants.DND_TYPE_PARAMETER],
+
         });
-        
+
         this.channelHandler = function(parameter, channel) {
             dataAbstraction.handleParameter(parameter);
         };
@@ -146,10 +147,10 @@ dojo.declare("SCDController", webgui.pac.Controller, {
             gridStructure.splice(gridStructure.indexOf(item.parameter), 1);
             presentation.setGridStructure(gridStructure);
         }
-        
+
         // TODO, this should be done with connect like updateViewCallback
         webgui.msgbus.subscribe("/viewparams/hide", removeFromViewCallback);
-        webgui.msgbus.subscribe("/viewparams/show",updateViewCallback); 
+        webgui.msgbus.subscribe("/viewparams/show",updateViewCallback);
     }
 });
 

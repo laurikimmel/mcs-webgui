@@ -6,36 +6,37 @@ dojo.require("dojo.dnd.Source");
 dojo.require("dojo.store.Observable");
 
 dojo.declare("webgui.pac.ListPresentation", webgui.pac.Presentation, {
-    
+
     constructor: function(args) {
-        
+
         dojo.safeMixin(this, args);
-        
+
         store = dojo.store.Observable(this.store);
-        
+
         this.dndSource = new dojo.dnd.Source(this.containerId, {
-                    copyOnly: true, 
+                    copyOnly: true,
                     creator: dojo.hitch(this, this.nodeCreator),
                 });
 
-        
+
         var all = store.query();
-        
+
         all.observe(dojo.hitch(this, this.dataUpdateHandler), true); // true to listen objects property changes
 
         if (this.selectionTopic != null) {
             dojo.connect(this.dndSource, "onMouseDown", this.dndSource, dojo.hitch(this, function(e) {
                 var data = this.dndSource.getItem(e.target.id).data;
-                msgbus.publish(this.selectionTopic, [data]);
+                // console.log("Posting selection to: " + this.selectionTopic + "; data: " + data);
+                webgui.msgbus.publish(this.selectionTopic, [data]);
             }));
         }
 
 
         // TODO - figure out way to listen all of the dnd drops originated from this view.
-        // - dojo.connect(dndSource, "onDrop", context, someFunction(source, nodes, copy));  
-        //      works for the target not for the source. 
+        // - dojo.connect(dndSource, "onDrop", context, someFunction(source, nodes, copy));
+        //      works for the target not for the source.
         //      Eg. has to be added to all possible targets.
-        // - msgbus.subscribe("/dnd/drop", function(source, nodes, copy, target) {}); 
+        // - msgbus.subscribe("/dnd/drop", function(source, nodes, copy, target) {});
         //      works, but can't access dnd data object
         // - any other way?
 
@@ -44,7 +45,7 @@ dojo.declare("webgui.pac.ListPresentation", webgui.pac.Presentation, {
     getId: function(item) {
         return webgui.common.Utils.hashCode(this.containerId + item.name);
     },
-    
+
     nodeCreator: function(item, hint) {
         var li = document.createElement("div");
         li.innerHTML = item.name;
@@ -55,9 +56,9 @@ dojo.declare("webgui.pac.ListPresentation", webgui.pac.Presentation, {
             type: this.dndTypes,
         };
     },
-    
+
     dataUpdateHandler: function(object, removedFrom, insertedInto) {
-        if (removedFrom > -1) { 
+        if (removedFrom > -1) {
             // existing object removed
             // TODO - implement
         }

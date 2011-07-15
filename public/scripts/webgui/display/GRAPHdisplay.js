@@ -12,7 +12,7 @@ dojo.require("dojox.charting.action2d.Tooltip");
 
 // TODO store, abstraction, presentation
 dojo.declare("GRAPHAbstraction", webgui.pac.Abstraction, {
-    
+
     constructor: function() {
         var key = "Timestamp";
         var storedata = { identifier: key, items: [] };
@@ -21,7 +21,7 @@ dojo.declare("GRAPHAbstraction", webgui.pac.Abstraction, {
         this.getStore = function() {
             return store;
         };
-        
+
         // for removing from store TODO refactor
         var counter = 0;
         var limit = 40;
@@ -46,7 +46,7 @@ dojo.declare("GRAPHAbstraction", webgui.pac.Abstraction, {
             if (counter > limit) {
                 // getting the size of the store
                 var size = function(size, request) {
-                    // remove excess elements 
+                    // remove excess elements
                     store.fetch({ count: (size - limit),
                         onItem: function(item) {
                             store.deleteItem(item);
@@ -63,22 +63,22 @@ dojo.declare("GRAPHAbstraction", webgui.pac.Abstraction, {
         function addViewParameter(item) {
             viewParameters[item.parameter] = true;
         }
-        
+
         function hideViewParameter(item) {
             viewParameters[item.parameter] = false;
         }
 
-        msgbus.subscribe("/viewparams/show", addViewParameter);
-        msgbus.subscribe("/viewparams/hide", hideViewParameter);
+        webgui.msgbus.subscribe("/viewparams/show", addViewParameter);
+        webgui.msgbus.subscribe("/viewparams/hide", hideViewParameter);
 
     }
 });
 
 dojo.declare("GRAPHPresentation", webgui.pac.Presentation, {
-    
+
     updateInterval: 500, // update interval in milliseconds
     domId: null,
-    
+
     constructor: function() {
         console.log("creating new chart in " + this.domId);
         var chart = new dojox.charting.Chart2D(this.domId);
@@ -106,7 +106,7 @@ dojo.declare("GRAPHPresentation", webgui.pac.Presentation, {
         dojo.connect(dijit.byId("chartPane"), "resize", this, function(evt) {
             var dim = dijit.byId("chartPane")._contentBox;
             chart.resize(dim.w, dim.h);
-        });        
+        });
         new dojox.charting.action2d.Magnify(chart, "default");
         new dojox.charting.action2d.Tooltip(chart, "default");
 
@@ -123,8 +123,8 @@ dojo.declare("GRAPHPresentation", webgui.pac.Presentation, {
             chartContainer.appendChild(dojo.create("div", { id: "legend" }));
             legend = new dojox.charting.widget.Legend({ chart:chart }, "legend");
         };
-        
-        setInterval(updateView, this.updateInterval);        
+
+        setInterval(updateView, this.updateInterval);
 
         // connect browser resize to chart
         dojo.connect(dijit.byId("chartPane"), "resize", this, function(evt){
@@ -138,14 +138,14 @@ dojo.declare("GRAPHPresentation", webgui.pac.Presentation, {
 dojo.declare("GRAPHController", webgui.pac.Controller, {
 
     divId: "chartDiv", // defaultId
-    
+
     constructor: function(args) {
-        
+
         var dataAbstraction = new GRAPHAbstraction();
         var presentation = new GRAPHPresentation({
             domId: this.divId
         });
-        
+
         presentation = webgui.pac.DndTargetable(presentation, {
             isSource: false,
             creator: function creator(item, hint) {
@@ -153,12 +153,12 @@ dojo.declare("GRAPHController", webgui.pac.Controller, {
                 console.log(item);
                 console.log("hint: " + hint);
                 var n = document.createElement("div");
-                msgbus.publish("/viewparams/show", [{ parameter:item.name }]);
+                webgui.msgbus.publish("/viewparams/show", [{ parameter:item.name }]);
                 return {node: n, data: item};
             },
-            accept: [DND_TYPE_PARAMETER],
+            accept: [webgui.common.Constants.DND_TYPE_PARAMETER],
         });
-        
+
         this.channelHandler = function(parameter, channel) {
             dataAbstraction.handleParameter(parameter);
         };
@@ -196,7 +196,7 @@ dojo.declare("GRAPHController", webgui.pac.Controller, {
                 presentation.getChart().updateSeries(item.Name, seriesArrayData);
             }
         };
-        
+
         // TODO not a good idea to update the view constantly
         dojo.connect(dataAbstraction.getStore(), "newItem", updateViewCallback);
 
@@ -209,12 +209,13 @@ dojo.declare("GRAPHController", webgui.pac.Controller, {
         }
 
         // TODO, this should be done with connect like updateViewCallback
-        msgbus.subscribe("/viewparams/hide", removeFromView);
+        webgui.msgbus.subscribe("/viewparams/hide", removeFromView);
     }
 });
 
 dojo.declare("webgui.display.GRAPHdisplay", null, {
     constructor: function(args) {
+        console.log("[GraphDisplay] initializing components ...");
         var controller = new GRAPHController(args);
         controller.subscribe();
     }

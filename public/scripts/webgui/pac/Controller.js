@@ -1,8 +1,9 @@
 ﻿dojo.provide("webgui.pac.Controller");
+dojo.require("webgui.msgbus");
 dojo.require("webgui.common.Constants");
 
 dojo.declare("webgui.pac.Controller", null, {
-    
+
     presentation : null,
     abstraction : null,
     channels : null,
@@ -10,8 +11,8 @@ dojo.declare("webgui.pac.Controller", null, {
     constructor : function(args) {
         dojo.safeMixin(this, args);
     },
-    
-    channelHandler : function(message, channel) { 
+
+    channelHandler : function(message, channel) {
         console.log("Missing handler implementation for " + channel);
     },
 
@@ -21,14 +22,15 @@ dojo.declare("webgui.pac.Controller", null, {
         }
         var channelHandler = this.channelHandler;
         dojo.forEach(this.channels, function(channel, i) {
+            console.log("Subscribing to channel[" + i + "]: " + channel);
             try {
-                msgbus.subscribe(channel, channelHandler);
-                msgbus.publish(TOPIC_CHANNEL_REQUEST, [{"channel" : channel}]);
+                webgui.msgbus.subscribe(channel, channelHandler);
+                webgui.msgbus.publish(webgui.common.Constants.TOPIC_CHANNEL_REQUEST, [{"channel" : channel, source: this.divId}]);
             }
             catch (e) {
                 console.error("[Controller] Failed to subscribe to channel " + channel + ";   " + e);
             }
-        });
+        }, this);
     },
-    
+
 });

@@ -4,17 +4,25 @@ dojo.require("webgui.common.Constants");
 
 dojo.declare("webgui.comm.ProxyBase", null, {
 
-
     constructor: function(args) {
         dojo.safeMixin(this, args);
         console.log("[ProxyBase] init");
         this.activeChannels = [];
-        webgui.msgbus.subscribe(TOPIC_CHANNEL_REQUEST, dojo.hitch(this, this.subscribeToChannel));
+        webgui.msgbus.subscribe(webgui.common.Constants.TOPIC_CHANNEL_REQUEST, dojo.hitch(this, this.subscribeToChannel));
     },
 
     subscribeToChannel: function(subscription) {
+        if (subscription == null) {
+            console.error("[ProxyBase] void channel subscription!");
+            return;
+        }
 
-        console.log("[ProxyBase] new channel subscription " + subscription.channel);
+        if (subscription.channel == null) {
+            console.error("[ProxyBase] invalid channel subscription!" + JSON.stringify(subscription));
+            return;
+        }
+
+        console.log("[ProxyBase] new channel subscription " + subscription.channel + "; source: " + subscription.source);
 
         var existing = dojo.filter(this.activeChannels, function(channel) {
             return channel == subscription.channel;
@@ -24,11 +32,10 @@ dojo.declare("webgui.comm.ProxyBase", null, {
             console.log("[ProxyBase] channel " + subscription.channel + " already active ");
             return;
         }
-        else {
-            if (this.connect != null) {
-                console.log("[ProxyBase] adding channel " + subscription.channel);
-                dojo.hitch(this, this.connect(subscription.channel, this.activeChannels));
-            }
+
+        if (this.connect != null) {
+            console.log("[ProxyBase] adding channel " + subscription.channel);
+            dojo.hitch(this, this.connect(subscription.channel, this.activeChannels));
         }
     },
 
