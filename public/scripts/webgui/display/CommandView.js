@@ -15,6 +15,7 @@ dojo.require("dijit.form.TimeTextBox");
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.TextBox");
 
+dojo.require("webgui.widget.DateTimeWidget");
 
 
 dojo.declare("CommandViewAbstraction", [webgui.pac.Abstraction, dojo.Stateful], {
@@ -77,16 +78,15 @@ dojo.declare("CommandPresentation", webgui.pac.Presentation, {
                     this.formBase);
 
             var releaseDateValue = new Date();
+            var timeTextBoxConstraints = { timePattern: 'HH:mm:ss', clickableIncrement: 'T00:01:00', visibleIncrement: 'T00:05:00', visibleRange: 'T01:00:00' } ;
 
-            var releaseDate = dijit.form.DateTextBox( { name: "releaseDate", label: "Command Release Date", value: releaseDateValue, } );
-            var releaseTime = new dijit.form.TimeTextBox( { name: "releaseTime", label: "Command Release Time", value: releaseDateValue, style: "width:auto"} );
-            var execDate = dijit.form.DateTextBox( { name: "execDate", label: "Command Execution Date"} );
-            var execTime = new dijit.form.TimeTextBox( { name: "execTime", label: "Command Execution Time"} );
+            var releaseDate = new webgui.widget.DateTimeWidget( { name: "releaseDate", label: "Command Release Date", value: releaseDateValue, } );
+            releaseDate.getTimeTextBox().set("constraints", timeTextBoxConstraints);
+
+            var execDate = new webgui.widget.DateTimeWidget( { name: "execDate", label: "Command Execution Date" } );
+            execDate.getTimeTextBox().set("constraints", timeTextBoxConstraints);
+
             var value = new dijit.form.TextBox( {name: "value", label: "Value", } );
-
-            dojo.connect(releaseDate, "onChange", releaseTime, function(newValue) {
-                this.set("value", newValue);
-            });
 
             var button = new dijit.form.Button({ label: "Go" });
             dojo.connect(button, "onClick", dojo.hitch(this, function() {
@@ -99,9 +99,7 @@ dojo.declare("CommandPresentation", webgui.pac.Presentation, {
 
 
             this.widgets.push(releaseDate);
-            this.widgets.push(releaseTime);
             this.widgets.push(execDate);
-            this.widgets.push(execTime);
             this.widgets.push(value);
 
             dojo.forEach(this.widgets, function(w) {
